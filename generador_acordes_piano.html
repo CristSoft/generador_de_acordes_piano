@@ -1,576 +1,671 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Acordes</title>
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Icons -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <style>
-    body {
-      transition: background-color 0.3s, color 0.3s;
-    }
-    /* Modo oscuro por defecto */
-    .dark-mode {
-      background-color: #343a40;
-      color: #f8f9fa;
-    }
-    .light-mode {
-      background-color: #f8f9fa;
-      color: #212529;
-    }
-    header {
-      padding: 20px;
-      position: relative;
-    }
-    .dark-mode header {
-      background-color: #212529 !important;
-      color: #f8f9fa !important;
-    }
-    .light-mode header {
-      background-color: #0d6efd !important;
-      color: #fff !important;
-    }
-    .container {
-      max-width: 600px;
-      margin-top: 20px;
-      margin-bottom: 60px;
-    }
-    .dark-mode .svg-box {
-      border: 1px solid #212529;
-      background: #212529;
-      padding: 10px;
-      margin-top: 20px;
-      overflow-x: auto;
-    }
-    .light-mode .svg-box {
-      border: 1px solid #dee2e6;
-      background: #ffffff;
-      padding: 10px;
-      margin-top: 20px;
-      overflow-x: auto;
-    }
-    .floating-download {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1050;
-      display: none;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-    }
-    /* Botón para cambiar de tema: posición fija en la esquina superior derecha */
-    #themeToggle {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: transparent;
-      border: none;
-      color: inherit;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 1100;
-    }
-    /* En modo claro, el ícono se mostrará en negro */
-    body.light-mode #themeToggle .material-icons {
-      color:#212529;
-    }
-    body.dark-mode .btn-generate {
-      background-color: #212529;
-      border-color: #212529;
-      color: #f8f9fa;
-    }
-    body.light-mode .btn-generate {
-      background-color: #0d6efd;
-      border-color: #0d6efd;
-      color: #fff;
-    }
-    .btn-generate:hover {
-      opacity: 0.9;
-    }
-    .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      padding: 5px 0;
-      font-size: 0.7rem;
-      border-top: 1px solid;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-    }
-    body.light-mode .footer {
-      background-color: #f8f9fa;
-      color: #6c757d;
-      border-color: #dee2e6;
-    }
-    body.dark-mode .footer {
-      background-color: #212529;
-      color: #adb5bd;
-      border-color: #343a40;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Acordes</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Modo oscuro por defecto */
+        .dark-mode {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+
+        .light-mode {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        header {
+            padding: 20px;
+            position: relative;
+        }
+
+        .dark-mode header {
+            background-color: #212529 !important;
+            color: #f8f9fa !important;
+        }
+
+        .light-mode header {
+            background-color: #0d6efd !important;
+            color: #fff !important;
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 20px;
+            margin-bottom: 60px;
+        }
+
+        .dark-mode .svg-box {
+            border: 1px solid #212529;
+            background: #212529;
+            padding: 10px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .light-mode .svg-box {
+            border: 1px solid #dee2e6;
+            background: #ffffff;
+            padding: 10px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .floating-download {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+            display: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        /* Botón para cambiar de tema: posición fija en la esquina superior derecha */
+        #themeToggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1100;
+        }
+
+        /* En modo claro, el ícono se mostrará en negro */
+        body.light-mode #themeToggle .material-icons {
+            color: #212529;
+        }
+
+        body.dark-mode .btn-generate {
+            background-color: #212529;
+            border-color: #212529;
+            color: #f8f9fa;
+        }
+
+        body.light-mode .btn-generate {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: #fff;
+        }
+
+        .btn-generate:hover {
+            opacity: 0.9;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 5px 0;
+            font-size: 0.7rem;
+            border-top: 1px solid;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body.light-mode .footer {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border-color: #dee2e6;
+        }
+
+        body.dark-mode .footer {
+            background-color: #212529;
+            color: #adb5bd;
+            border-color: #343a40;
+        }
+    </style>
 </head>
+
 <body class="dark-mode">
-  <header>
-    <h1 class="text-center">Generador de Acordes</h1>
-  </header>
-  <!-- Botón flotante para cambiar de tema -->
-  <button id="themeToggle" onclick="toggleTheme()">
-    <span class="material-icons">light_mode</span>
-  </button>
-  <div class="container">
-    <!-- Área de entrada -->
-    <div class="mb-3">
-      <label for="chordInput" class="form-label">
-        Ingresa uno o varios acordes (separados por comas o saltos de línea, ej.: C, Dm, G7, A/D, 6/9, 9/2):
-      </label>
-      <textarea class="form-control" id="chordInput" rows="2"
-        placeholder="C, Dm, G7, A/D, 6/9, 9/2, ..."></textarea>
-    </div>
-    <!-- Switches -->
-    <div class="mb-3 d-flex justify-content-around">
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="switchNotes" checked onchange="toggleNoteNames()">
-        <label class="form-check-label" for="switchNotes">Ver Notas</label>
-      </div>
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="switchOctave" checked onchange="toggleOctaveNumbers()">
-        <label class="form-check-label" for="switchOctave">Ver Octavas</label>
-      </div>
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="switchChord" checked onchange="toggleChordName()">
-        <label class="form-check-label" for="switchChord">Nombre de Acorde</label>
-      </div>
-    </div>
-    <!-- Controles de colores -->
-    <div class="mb-3">
-      <div class="row">
-        <div class="col">
-          <label for="whiteKeyColorPicker" class="form-label">Color de blancas</label>
-          <input type="color" id="whiteKeyColorPicker" value="#ffffff">
-          <label for="whiteAlpha" class="form-label" style="font-size: 0.9rem;">Transparencia (0-100%)</label>
-          <input type="range" id="whiteAlpha" min="0" max="100" value="100">
+    <header>
+        <h1 class="text-center">Generador de Acordes</h1>
+    </header>
+    <!-- Botón flotante para cambiar de tema -->
+    <button id="themeToggle" onclick="toggleTheme()">
+        <span class="material-icons">light_mode</span>
+    </button>
+    <div class="container">
+        <!-- Área de entrada -->
+        <div class="mb-3">
+            <label for="chordInput" class="form-label">
+                Ingresa uno o varios acordes (separados por comas o saltos de línea, ej.: C, Dm, G7, A/D, 6/9, 9/2):
+            </label>
+            <textarea class="form-control" id="chordInput" rows="2"
+                placeholder="C, Dm, G7, A/D, 6/9, 9/2, ..."></textarea>
         </div>
-        <div class="col">
-          <label for="blackKeyColorPicker" class="form-label">Color de negras</label>
-          <input type="color" id="blackKeyColorPicker" value="#000224">
-          <label for="blackAlpha" class="form-label" style="font-size: 0.9rem;">Transparencia (0-100%)</label>
-          <input type="range" id="blackAlpha" min="0" max="100" value="100">
+        <!-- Switches -->
+        <div class="mb-3 d-flex justify-content-around">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="switchNotes" checked onchange="toggleNoteNames()">
+                <label class="form-check-label" for="switchNotes">Ver Notas</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="switchOctave" checked
+                    onchange="toggleOctaveNumbers()">
+                <label class="form-check-label" for="switchOctave">Ver Octavas</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="switchChord" checked onchange="toggleChordName()">
+                <label class="form-check-label" for="switchChord">Nombre de Acorde</label>
+            </div>
         </div>
-        <div class="col">
-          <label for="highlightColorPicker" class="form-label">Color destacado</label>
-          <input type="color" id="highlightColorPicker" value="#c0a5e4">
-          <label for="highlightAlpha" class="form-label" style="font-size: 0.9rem;">Transparencia (0-100%)</label>
-          <input type="range" id="highlightAlpha" min="0" max="100" value="100">
+        <!-- Controles de colores -->
+        <div class="mb-3">
+            <div class="row">
+                <div class="col">
+                    <label for="whiteKeyColorPicker" class="form-label">Color de blancas</label>
+                    <input type="color" id="whiteKeyColorPicker" value="#ffffff">
+                    <label for="whiteAlpha" class="form-label" style="font-size: 0.9rem;">Transparencia (0-100%)</label>
+                    <input type="range" id="whiteAlpha" min="0" max="100" value="100">
+                </div>
+                <div class="col">
+                    <label for="blackKeyColorPicker" class="form-label">Color de negras</label>
+                    <input type="color" id="blackKeyColorPicker" value="#000224">
+                    <label for="blackAlpha" class="form-label" style="font-size: 0.9rem;">Transparencia (0-100%)</label>
+                    <input type="range" id="blackAlpha" min="0" max="100" value="100">
+                </div>
+                <div class="col">
+                    <label for="highlightColorPicker" class="form-label">Color destacado</label>
+                    <input type="color" id="highlightColorPicker" value="#c0a5e4">
+                    <label for="highlightAlpha" class="form-label" style="font-size: 0.9rem;">Transparencia
+                        (0-100%)</label>
+                    <input type="range" id="highlightAlpha" min="0" max="100" value="100">
+                </div>
+            </div>
         </div>
-      </div>
+        <!-- Botón de Generar -->
+        <div class="d-grid gap-2">
+            <button class="btn btn-generate btn-lg rounded-pill" onclick="generateSVGs()">Generar</button>
+        </div>
+        <!-- Contenedor de SVG -->
+        <div id="svgContainer" class="svg-box"></div>
     </div>
-    <!-- Botón de Generar -->
-    <div class="d-grid gap-2">
-      <button class="btn btn-generate btn-lg rounded-pill" onclick="generateSVGs()">Generar</button>
-    </div>
-    <!-- Contenedor de SVG -->
-    <div id="svgContainer" class="svg-box"></div>
-  </div>
-  <!-- Botón de Descargar -->
-  <button class="btn btn-danger floating-download" id="downloadBtn" onclick="downloadSVGs()">
-    <span class="material-icons">cloud_download</span>
-  </button>
-  <footer class="footer">
-    <p>&copy; 2025 Cristsoft. Todos los derechos reservados.</p>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-  <!-- NUEVA LÓGICA DE ARMADO DE ACORDES -->
-  <script>
-    // Diccionarios y fórmulas
-    const noteToSemitone = {
-      "C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3,
-      "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8,
-      "Ab": 8, "A": 9, "A#": 10, "Bb": 10, "B": 11
-    };
-    const semitoneNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-    const chordFormulas = {
-      "": [0, 4, 7],
-      "m": [0, 3, 7],
-      "dim": [0, 3, 6],
-      "aug": [0, 4, 8],
-      "maj7": [0, 4, 7, 11],
-      "7": [0, 4, 7, 10],
-      "m7": [0, 3, 7, 10],
-      "m7b5": [0, 3, 6, 10],
-      "ø": [0, 3, 6, 10],
-      "dim7": [0, 3, 6, 9],
-      "6": [0, 4, 7, 9],
-      "sus4": [0, 5, 7],
-      "7sus4": [0, 5, 7, 10],
-      "5": [0, 7],
-      "sus2": [0, 2, 7],
-      "add9": [0, 4, 7, 14],
-      "m9": [0, 3, 7, 10, 14],
-      "maj9": [0, 4, 7, 11, 14],
-      "6/9": [0, 2, 4, 7, 9],
-      "11": [0, 4, 7, 10, 14, 17],
-      "13": [0, 4, 7, 10, 14, 21],
-      "9": [0, 2, 4, 7]
-    };
-    function parseChordSymbol(chordSymbol) {
-      chordSymbol = chordSymbol.trim();
-      let parts = chordSymbol.split("/");
-      if (parts.length > 1) {
-        let candidate = parts[1].trim();
-        if (!/^[A-G](?:#|b)?$/.test(candidate)) {
-          parts = [chordSymbol];
+    <!-- Botón de Descargar -->
+    <button class="btn btn-danger floating-download" id="downloadBtn" onclick="downloadSVGs()">
+        <span class="material-icons">cloud_download</span>
+    </button>
+    <footer class="footer">
+        <p>&copy; 2025 Cristsoft. Todos los derechos reservados.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <!-- NUEVA LÓGICA DE ARMADO DE ACORDES -->
+    <script>
+        // Diccionarios y fórmulas
+        const noteToSemitone = {
+            "C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3,
+            "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8,
+            "Ab": 8, "A": 9, "A#": 10, "Bb": 10, "B": 11
+        };
+        const semitoneNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        const chordFormulas = {
+            "": [0, 4, 7],
+            "m": [0, 3, 7],
+            "dim": [0, 3, 6],
+            "aug": [0, 4, 8],
+            "maj7": [0, 4, 7, 11],
+            "7": [0, 4, 7, 10],
+            "m7": [0, 3, 7, 10],
+            "m7b5": [0, 3, 6, 10],
+            "ø": [0, 3, 6, 10],
+            "dim7": [0, 3, 6, 9],
+            "6": [0, 4, 7, 9],
+            "sus4": [0, 5, 7],
+            "7sus4": [0, 5, 7, 10],
+            "5": [0, 7],
+            "sus2": [0, 2, 7],
+            "add9": [0, 4, 7, 14],
+            "m9": [0, 3, 7, 10, 14],
+            "maj9": [0, 4, 7, 11, 14],
+            "6/9": [0, 2, 4, 7, 9],
+            "11": [0, 4, 7, 10, 14, 17],
+            "13": [0, 4, 7, 10, 14, 21],
+            "9": [0, 2, 4, 7]
+        };
+        function parseChordSymbol(chordSymbol) {
+            chordSymbol = chordSymbol.trim();
+            let parts = chordSymbol.split("/");
+            let inversion = parts[1] ? parts[1].trim() : null;
+            const baseSymbol = parts[0].trim();
+            const regex = /^([A-G])((?:#|b)?)(.*)$/;
+            const match = baseSymbol.match(regex);
+            if (!match) return null;
+            let root = match[1] + match[2];
+            let type = match[3].trim();
+            if (type === "") type = "";
+            // Normalizamos la nota raíz y la inversión (si existe)
+            return {
+                root: normalizeNote(root),
+                type,
+                inversion: inversion ? normalizeNote(inversion) : null
+            };
         }
-      }
-      const baseSymbol = parts[0].trim();
-      const inversion = parts[1] ? parts[1].trim() : null;
-      const regex = /^([A-G])((?:#|b)?)(.*)$/;
-      const match = baseSymbol.match(regex);
-      if (!match) return null;
-      let root = match[1] + match[2];
-      let type = match[3].trim();
-      if (type === "") type = "";
-      return { root, type, inversion };
-    }
-    function intervalsToBinary(intervals) {
-      let binaryArr = new Array(18).fill("0");
-      intervals.forEach(interval => { if (interval < 18) binaryArr[interval] = "1"; });
-      return binaryArr.join("");
-    }
-    function getInversionIntervals(intervals, inversionIndex) {
-      const n = intervals.length;
-      let newIntervals = [];
-      for (let i = inversionIndex; i < n; i++) {
-        newIntervals.push(intervals[i] - intervals[inversionIndex]);
-      }
-      for (let i = 0; i < inversionIndex; i++) {
-        newIntervals.push(intervals[i] - intervals[inversionIndex] + 12);
-      }
-      return newIntervals;
-    }
-    function chordToBinary(chordSymbol) {
-      const parsed = parseChordSymbol(chordSymbol);
-      if (!parsed) return { error: "Símbolo de acorde no válido." };
-      const { root, type, inversion } = parsed;
-      if (!(type in chordFormulas)) {
-        return { error: "Tipo de acorde no soportado: " + type };
-      }
-      const baseIntervals = chordFormulas[type];
-      const baseOctave = 4;
-      const rootValue = noteToSemitone[root];
-      if (!inversion) {
-        const n = baseIntervals.length;
-        let best = null;
-        for (let inv = 0; inv < n; inv++) {
-          const invIntervals = getInversionIntervals(baseIntervals, inv);
-          const maxInterval = Math.max(...invIntervals);
-          if (maxInterval < 18) { best = { inversion: inv, intervals: invIntervals, maxInterval }; break; }
-          if (!best || maxInterval < best.maxInterval) { best = { inversion: inv, intervals: invIntervals, maxInterval }; }
+        function intervalsToBinary(intervals) {
+            let binaryArr = new Array(18).fill("0");
+            intervals.forEach(interval => { if (interval < 18) binaryArr[interval] = "1"; });
+            return binaryArr.join("");
         }
-        const p1Value = (rootValue + baseIntervals[best.inversion]) % 12;
-        const p1 = semitoneNames[p1Value];
-        return { p1, binary: intervalsToBinary(best.intervals), inversion: best.inversion, slash: false };
-      } else {
-        const bassValue = noteToSemitone[inversion] % 12;
-        const chordTones = baseIntervals.map(interval => (rootValue + interval) % 12);
-        if (chordTones.includes(bassValue)) {
-          let invIndex = chordTones.indexOf(bassValue);
-          const invIntervals = getInversionIntervals(baseIntervals, invIndex);
-          const p1Value = (rootValue + baseIntervals[invIndex]) % 12;
-          const p1 = semitoneNames[p1Value];
-          return { p1, binary: intervalsToBinary(invIntervals), inversion: invIndex, slash: true };
-        } else {
-          const rootAbs = rootValue + baseOctave * 12;
-          let chordTonesAbs = baseIntervals.map(interval => rootAbs + interval);
-          const bassAbs = noteToSemitone[inversion] + baseOctave * 12;
-          chordTonesAbs = chordTonesAbs.map(tone => {
-            while (tone < bassAbs) { tone += 12; }
-            return tone;
-          });
-          let finalTones = [bassAbs].concat(chordTonesAbs);
-          finalTones.sort((a, b) => a - b);
-          let newIntervals = finalTones.map(tone => tone - bassAbs);
-          return { p1: inversion, binary: intervalsToBinary(newIntervals), inversion: 0, slash: true };
+        function getInversionIntervals(intervals, inversionIndex) {
+            const n = intervals.length;
+            let newIntervals = [];
+            for (let i = inversionIndex; i < n; i++) {
+                newIntervals.push(intervals[i] - intervals[inversionIndex]);
+            }
+            for (let i = 0; i < inversionIndex; i++) {
+                newIntervals.push(intervals[i] - intervals[inversionIndex] + 12);
+            }
+            return newIntervals;
         }
-      }
-    }
-    function parseChordBinary(chordStr) {
-      chordStr = chordStr.trim();
-      if (!chordStr) { alert("Por favor, ingresa un acorde."); return null; }
-      let result = chordToBinary(chordStr);
-      if (result.error) { alert(result.error); return null; }
-      let baseOctave = 4;
-      let baseSemitone = noteToSemitone[result.p1] + baseOctave * 12;
-      let chordNotes = [];
-      for (let i = 0; i < result.binary.length; i++) {
-        if (result.binary[i] === "1") {
-          let noteValue = baseSemitone + i;
-          let noteName = semitoneNames[noteValue % 12];
-          let octave = Math.floor(noteValue / 12);
-          chordNotes.push({ note: noteName, octave: octave });
+        function chordToBinary(chordSymbol) {
+            const parsed = parseChordSymbol(chordSymbol);
+            if (!parsed) return { error: "Símbolo de acorde no válido." };
+            const { root, type, inversion } = parsed;
+            if (!(type in chordFormulas)) {
+                return { error: "Tipo de acorde no soportado: " + type };
+            }
+            const baseIntervals = chordFormulas[type];
+            const baseOctave = 4;
+            const rootValue = noteToSemitone[root];
+            if (!inversion) {
+                const n = baseIntervals.length;
+                let best = null;
+                for (let inv = 0; inv < n; inv++) {
+                    const invIntervals = getInversionIntervals(baseIntervals, inv);
+                    const maxInterval = Math.max(...invIntervals);
+                    if (maxInterval < 18) { best = { inversion: inv, intervals: invIntervals, maxInterval }; break; }
+                    if (!best || maxInterval < best.maxInterval) { best = { inversion: inv, intervals: invIntervals, maxInterval }; }
+                }
+                const p1Value = (rootValue + baseIntervals[best.inversion]) % 12;
+                const p1 = semitoneNames[p1Value];
+                return { p1, binary: intervalsToBinary(best.intervals), inversion: best.inversion, slash: false };
+            } else {
+                const bassValue = noteToSemitone[inversion] % 12;
+                const chordTones = baseIntervals.map(interval => (rootValue + interval) % 12);
+                if (chordTones.includes(bassValue)) {
+                    let invIndex = chordTones.indexOf(bassValue);
+                    const invIntervals = getInversionIntervals(baseIntervals, invIndex);
+                    const p1Value = (rootValue + baseIntervals[invIndex]) % 12;
+                    const p1 = semitoneNames[p1Value];
+                    return { p1, binary: intervalsToBinary(invIntervals), inversion: invIndex, slash: true };
+                } else {
+                    const rootAbs = rootValue + baseOctave * 12;
+                    let chordTonesAbs = baseIntervals.map(interval => rootAbs + interval);
+                    const bassAbs = noteToSemitone[inversion] + baseOctave * 12;
+                    chordTonesAbs = chordTonesAbs.map(tone => {
+                        while (tone < bassAbs) { tone += 12; }
+                        return tone;
+                    });
+                    let finalTones = [bassAbs].concat(chordTonesAbs);
+                    finalTones.sort((a, b) => a - b);
+                    let newIntervals = finalTones.map(tone => tone - bassAbs);
+                    return { p1: inversion, binary: intervalsToBinary(newIntervals), inversion: 0, slash: true };
+                }
+            }
         }
-      }
-      return {
-        chordNotes: chordNotes,
-        label: chordStr,
-        p1: result.p1,
-        binary: result.binary,
-        inversion: (result.inversion !== undefined) ? result.inversion : null,
-        slash: result.slash,
-        root: parseChordSymbol(chordStr).root
-      };
-    }
-    function adjustStartNote(note) {
-      const blackToWhite = {
-        "C#": "C",
-        "D#": "D",
-        "F#": "F",
-        "G#": "G",
-        "A#": "A"
-      };
-      return blackToWhite[note] || note;
-    }
-    function whiteKeyNumber(note, octave) {
-      let idx = whiteOrder.indexOf(note);
-      if (idx === -1) {
-        note = normalizeNote(note);
-        idx = whiteOrder.indexOf(note);
-      }
-      return octave * 7 + idx;
-    }
-    function getStartingWhiteKeyFromP1(p1, baseOctave) {
-      if (!whiteOrder.includes(p1)) {
-        p1 = adjustStartNote(p1);
-      }
-      let wNum = whiteKeyNumber(p1, baseOctave);
-      let newWNum = wNum - 2;
-      let startingOctave = Math.floor(newWNum / 7);
-      let startingLetter = whiteOrder[newWNum % 7];
-      return { letter: startingLetter, octave: startingOctave };
-    }
-  </script>
-  <!-- CÓDIGO PARA LA INTERFAZ Y GENERACIÓN DE SVG -->
-  <script>
-    let showNoteNames = true;
-    let showChordName = true;
-    let generatedSVGs = [];
-    let showOctaveNumbers = true;
-    const notesSharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-    const whiteIndices = { "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11 };
-    const whiteOrder = ["C", "D", "E", "F", "G", "A", "B"];
-    function toggleOctaveNumbers() {
-      showOctaveNumbers = !showOctaveNumbers;
-      if (document.getElementById("chordInput").value.trim() !== "") { generateSVGs(); }
-    }
-    function toggleNoteNames() {
-      showNoteNames = !showNoteNames;
-      if (document.getElementById("chordInput").value.trim() !== "") { generateSVGs(); }
-    }
-    function toggleChordName() {
-      showChordName = !showChordName;
-      if (document.getElementById("chordInput").value.trim() !== "") { generateSVGs(); }
-    }
-    function hexToRgb(hex) {
-      hex = hex.replace('#', '');
-      let bigint = parseInt(hex, 16);
-      let r, g, b;
-      if (hex.length === 3) {
-        r = (bigint >> 8) & 0xF;
-        g = (bigint >> 4) & 0xF;
-        b = bigint & 0xF;
-        r = (r << 4) | r;
-        g = (g << 4) | g;
-        b = (b << 4) | b;
-      } else {
-        r = (bigint >> 16) & 255;
-        g = (bigint >> 8) & 255;
-        b = bigint & 255;
-      }
-      return { r, g, b };
-    }
-    function getRgba(hex, alpha) {
-      const rgb = hexToRgb(hex);
-      return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
-    }
-    function toggleKeyColor(evt) {
-      evt.preventDefault();
-      const key = evt.target;
-      const highlight = document.getElementById("highlightColorPicker").value;
-      const normal = key.getAttribute("data-normal-fill");
-      if (key.dataset.toggled === "true") {
-        key.setAttribute("fill", normal);
-        key.dataset.toggled = "false";
-      } else {
-        key.setAttribute("fill", highlight);
-        key.dataset.toggled = "true";
-      }
-    }
-    function normalizeNote(note) {
-      note = note.trim();
-      note = note.charAt(0).toUpperCase() + note.slice(1);
-      const flatsToSharps = { "Db": "C#", "Eb": "D#", "Gb": "F#", "Ab": "G#", "Bb": "A#" };
-      if (note.length >= 2 && note[1] === "b") {
-        let key = note.slice(0, 2);
-        return flatsToSharps[key] || note;
-      }
-      return note;
-    }
-    function semitoneToNote(semitone) {
-      let octave = Math.floor(semitone / 12);
-      let noteName = notesSharp[semitone % 12];
-      return { note: noteName, octave: octave };
-    }
-    function getWhiteKeysWithOctave(startNote, n, startOctave = 4) {
-      let keys = [];
-      let index = whiteOrder.indexOf(startNote);
-      for (let i = 0; i < n; i++) {
-        let pos = index + i;
-        let noteName = whiteOrder[pos % whiteOrder.length];
-        let currentOctave = startOctave + Math.floor(pos / whiteOrder.length);
-        keys.push({ note: noteName, octave: currentOctave });
-      }
-      return keys;
-    }
-    function whiteKeyInterval(note1, note2) {
-      let i1 = whiteIndices[note1];
-      let i2 = whiteIndices[note2];
-      let interval = i2 - i1;
-      return interval >= 0 ? interval : interval + 12;
-    }
-    function getBlackKey(whiteNote) {
-      const mapping = { "C": "C#", "D": "D#", "F": "F#", "G": "G#", "A": "A#" };
-      return mapping[whiteNote] || null;
-    }
-    function formatChordLabel(chord) {
-      if (!chord || chord.length === 0) return chord;
-      return chord.charAt(0).toUpperCase() + chord.slice(1);
-    }
-    function generateKeyboardSVG(chordData) {
-      let whiteHex = document.getElementById("whiteKeyColorPicker").value;
-      let whiteAlpha = document.getElementById("whiteAlpha").value / 100;
-      let blackHex = document.getElementById("blackKeyColorPicker").value;
-      let blackAlpha = document.getElementById("blackAlpha").value / 100;
-      let highlightHex = document.getElementById("highlightColorPicker").value;
-      let highlightAlpha = document.getElementById("highlightAlpha").value / 100;
-      let whiteNormalColor = getRgba(whiteHex, whiteAlpha);
-      let blackNormalColor = getRgba(blackHex, blackAlpha);
-      let highlightColor = getRgba(highlightHex, highlightAlpha);
-      const whiteKeyWidth = 50, whiteKeyHeight = 200, blackKeyWidth = 30, blackKeyHeight = 120, marginTop = 30;
-      let whiteKeys;
-      if (chordData.slash) {
-        let startNote = whiteOrder.includes(chordData.p1) ? chordData.p1 : adjustStartNote(chordData.p1);
-        whiteKeys = getWhiteKeysWithOctave(startNote, 10, 4);
-      } else if (chordData.chordNotes.length >= 4) {
-        let startObj = getStartingWhiteKeyFromP1(chordData.p1, 4);
-        whiteKeys = getWhiteKeysWithOctave(startObj.letter, 10, startObj.octave);
-      } else {
-        let group1 = ["C", "C#", "D", "D#", "E", "F"];
-        let group2 = ["G", "G#", "A", "A#", "B"];
-        let startingLetter = group1.includes(chordData.p1) ? "C" : (group2.includes(chordData.p1) ? "F" : "C");
-        whiteKeys = getWhiteKeysWithOctave(startingLetter, 10, 4);
-      }
-      const totalWhiteWidth = whiteKeys.length * whiteKeyWidth, svgHeight = marginTop + whiteKeyHeight + 20;
-      let svg = `<svg width="80%" viewBox="0 0 ${totalWhiteWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg" style="display:block; margin: 0 auto;">`;
-      if (showChordName) {
-        svg += `<text x="${totalWhiteWidth / 2}" y="20" text-anchor="middle" font-size="18" fill="black">
-          ${formatChordLabel(chordData.label)}
-        </text>`;
-      }
-      whiteKeys.forEach((keyObj, index) => {
-        let x = index * whiteKeyWidth;
-        let highlight = chordData.chordNotes.some(ch => ch.note === keyObj.note && ch.octave === keyObj.octave);
-        let fillColor = highlight ? highlightColor : whiteNormalColor;
-        svg += `<rect x="${x}" y="${marginTop}" width="${whiteKeyWidth}" height="${whiteKeyHeight}" 
-          fill="${fillColor}" stroke="black" data-normal-fill="${whiteNormalColor}" onclick="toggleKeyColor(event)" ontouchstart="toggleKeyColor(event)" />`;
-        if (showNoteNames) {
-          let label = keyObj.note;
-          if (showOctaveNumbers) { label += keyObj.octave; }
-          svg += `<text x="${x + whiteKeyWidth / 2}" y="${marginTop + whiteKeyHeight - 10}" text-anchor="middle" font-size="16" fill="black">${label}</text>`;
+        function parseChordBinary(chordStr) {
+            chordStr = chordStr.trim();
+            if (!chordStr) { alert("Por favor, ingresa un acorde."); return null; }
+            let result = chordToBinary(chordStr);
+            if (result.error) { alert(result.error); return null; }
+            let baseOctave = 4;
+            let baseSemitone = noteToSemitone[result.p1] + baseOctave * 12;
+            let chordNotes = [];
+            for (let i = 0; i < result.binary.length; i++) {
+                if (result.binary[i] === "1") {
+                    let noteValue = baseSemitone + i;
+                    let noteName = semitoneNames[noteValue % 12];
+                    let octave = Math.floor(noteValue / 12);
+                    chordNotes.push({ note: noteName, octave: octave });
+                }
+            }
+            return {
+                chordNotes: chordNotes,
+                label: chordStr,
+                p1: result.p1,
+                binary: result.binary,
+                inversion: (result.inversion !== undefined) ? result.inversion : null,
+                slash: result.slash,
+                root: parseChordSymbol(chordStr).root
+            };
         }
-      });
-      svg += `<defs>
-        <clipPath id="clipArea">
-          <rect x="0" y="${marginTop}" width="${totalWhiteWidth}" height="${whiteKeyHeight}"/>
-        </clipPath>
-      </defs><g clip-path="url(#clipArea)">`;
-      for (let i = 0; i < whiteKeys.length - 1; i++) {
-        let currentNote = whiteKeys[i].note, nextNote = whiteKeys[i + 1].note;
-        let gap = whiteKeyInterval(currentNote, nextNote);
-        if (gap === 2) {
-          let blackNote = getBlackKey(currentNote);
-          if (blackNote) {
-            let x = (i + 1) * whiteKeyWidth - blackKeyWidth / 2;
-            let blackHighlight = chordData.chordNotes.some(ch => normalizeNote(ch.note) === normalizeNote(blackNote) && ch.octave === whiteKeys[i].octave);
-            let fillColor = blackHighlight ? highlightColor : blackNormalColor;
-            svg += `<rect x="${x}" y="${marginTop}" width="${blackKeyWidth}" height="${blackKeyHeight}" 
-              fill="${fillColor}" stroke="black" data-normal-fill="${blackNormalColor}" onclick="toggleKeyColor(event)" ontouchstart="toggleKeyColor(event)" />`;
-          }
+        function adjustStartNote(note) {
+            const blackToWhite = {
+                "C#": "C",
+                "D#": "D",
+                "F#": "F",
+                "G#": "G",
+                "A#": "A"
+            };
+            return blackToWhite[note] || note;
         }
-      }
-      svg += `</g></svg>`;
-      return svg;
-    }
-    function generateSVGs() {
-      let input = document.getElementById("chordInput").value;
-      if (!input.trim()) { alert("Por favor, ingresa al menos un acorde."); return; }
-      let chords = input.split(/[\n,]+/).map(ch => ch.trim()).filter(Boolean);
-      let svgContainer = document.getElementById("svgContainer");
-      svgContainer.innerHTML = "";
-      generatedSVGs = [];
-      chords.forEach(chordStr => {
-        let chordData = parseChordBinary(chordStr);
-        if (chordData) {
-          let svg = generateKeyboardSVG(chordData);
-          generatedSVGs.push({ label: chordStr, svg: svg });
-          svgContainer.innerHTML += svg + "<br><br>";
+        function whiteKeyNumber(note, octave) {
+            let idx = whiteOrder.indexOf(note);
+            if (idx === -1) {
+                note = normalizeNote(note);
+                idx = whiteOrder.indexOf(note);
+            }
+            return octave * 7 + idx;
         }
-      });
-      if (generatedSVGs.length > 0) { document.getElementById("downloadBtn").style.display = "block"; }
-    }
-    function downloadSVGs() {
-      if (generatedSVGs.length === 0) return;
-      let zip = new JSZip();
-      generatedSVGs.forEach(item => {
-        let fileName = item.label.replace(/[^A-Za-z0-9#]/g, "_") + ".svg";
-        zip.file(fileName, item.svg);
-      });
-      zip.generateAsync({ type: "blob" }).then(content => {
-        let a = document.createElement("a");
-        a.href = URL.createObjectURL(content);
-        a.download = "acordes.zip";
-        a.click();
-      });
-    }
-    document.getElementById('chordInput').addEventListener('change', function () {
-      let chords = this.value.split(/[\n,]+/);
-      let formattedChords = chords.map(ch => {
-        ch = ch.trim();
-        if (!ch) return "";
-        return ch.charAt(0).toUpperCase() + ch.slice(1);
-      }).filter(Boolean);
-      this.value = formattedChords.join(", ");
-    });
-  </script>
-  <!-- Función para alternar modo claro/oscuro -->
-  <script>
-    function toggleTheme() {
-      const body = document.body;
-      const themeToggle = document.getElementById("themeToggle");
-      if (body.classList.contains("dark-mode")) {
-        body.classList.remove("dark-mode");
-        body.classList.add("light-mode");
-        themeToggle.innerHTML = '<span class="material-icons">dark_mode</span>';
-      } else {
-        body.classList.remove("light-mode");
-        body.classList.add("dark-mode");
-        themeToggle.innerHTML = '<span class="material-icons">light_mode</span>';
-      }
-    }
-  </script>
+        function getStartingWhiteKeyFromP1(p1, baseOctave) {
+            if (!whiteOrder.includes(p1)) {
+                p1 = adjustStartNote(p1);
+            }
+            let wNum = whiteKeyNumber(p1, baseOctave);
+            let newWNum = wNum - 2;
+            let startingOctave = Math.floor(newWNum / 7);
+            let startingLetter = whiteOrder[newWNum % 7];
+            return { letter: startingLetter, octave: startingOctave };
+        }
+    </script>
+    <!-- CÓDIGO PARA LA INTERFAZ Y GENERACIÓN DE SVG -->
+    <script>
+        let showNoteNames = true;
+        let showChordName = true;
+        let generatedSVGs = [];
+        let showOctaveNumbers = true;
+        const notesSharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        const whiteIndices = { "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11 };
+        const whiteOrder = ["C", "D", "E", "F", "G", "A", "B"];
+        function toggleOctaveNumbers() {
+            showOctaveNumbers = !showOctaveNumbers;
+            if (document.getElementById("chordInput").value.trim() !== "") { generateSVGs(); }
+        }
+        function toggleNoteNames() {
+            showNoteNames = !showNoteNames;
+            if (document.getElementById("chordInput").value.trim() !== "") { generateSVGs(); }
+        }
+        function toggleChordName() {
+            showChordName = !showChordName;
+            if (document.getElementById("chordInput").value.trim() !== "") { generateSVGs(); }
+        }
+        function hexToRgb(hex) {
+            hex = hex.replace('#', '');
+            let bigint = parseInt(hex, 16);
+            let r, g, b;
+            if (hex.length === 3) {
+                r = (bigint >> 8) & 0xF;
+                g = (bigint >> 4) & 0xF;
+                b = bigint & 0xF;
+                r = (r << 4) | r;
+                g = (g << 4) | g;
+                b = (b << 4) | b;
+            } else {
+                r = (bigint >> 16) & 255;
+                g = (bigint >> 8) & 255;
+                b = bigint & 255;
+            }
+            return { r, g, b };
+        }
+        function getRgba(hex, alpha) {
+            const rgb = hexToRgb(hex);
+            return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+        }
+        function toggleKeyColor(evt) {
+            evt.preventDefault();
+            const key = evt.target;
+            const highlight = document.getElementById("highlightColorPicker").value;
+            const normal = key.getAttribute("data-normal-fill");
+            if (key.dataset.toggled === "true") {
+                key.setAttribute("fill", normal);
+                key.dataset.toggled = "false";
+            } else {
+                key.setAttribute("fill", highlight);
+                key.dataset.toggled = "true";
+            }
+        }
+        function normalizeNote(note) {
+            // Si la nota contiene slash, separamos y normalizamos cada parte
+            if (note.includes("/")) {
+                return note.split("/").map(part => normalizeNote(part)).join("/");
+            }
+
+            note = note.trim();
+
+            // Correcciones fijas para casos conocidos
+            const fixedCorrections = {
+                "Fb": "E",
+                "E#": "F",
+                "Cb": "B",
+                "B#": "C"
+            };
+            if (fixedCorrections[note]) return fixedCorrections[note];
+
+            // Procesamos notas con uno o más accidentales usando semitonos
+            const regex = /^([A-G])([b#]+)?$/;
+            const match = note.match(regex);
+            if (match) {
+                const naturalSemitones = { "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11 };
+                const semitoneToSharp = { 0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#", 11: "B" };
+
+                let base = match[1].toUpperCase();
+                let accidentals = match[2] || "";
+                let semitone = naturalSemitones[base];
+                for (let char of accidentals) {
+                    if (char === "#") {
+                        semitone += 1;
+                    } else if (char === "b") {
+                        semitone -= 1;
+                    }
+                }
+                // Normalizamos al rango 0-11
+                semitone = (semitone % 12 + 12) % 12;
+                return semitoneToSharp[semitone];
+            }
+
+            // Si no coincide con el patrón, se devuelve la nota original
+            return note;
+        }
+
+        function semitoneToNote(semitone) {
+            let octave = Math.floor(semitone / 12);
+            let noteName = notesSharp[semitone % 12];
+            return { note: noteName, octave: octave };
+        }
+        function getWhiteKeysWithOctave(startNote, n, startOctave = 4) {
+            let keys = [];
+            let index = whiteOrder.indexOf(startNote);
+            for (let i = 0; i < n; i++) {
+                let pos = index + i;
+                let noteName = whiteOrder[pos % whiteOrder.length];
+                let currentOctave = startOctave + Math.floor(pos / whiteOrder.length);
+                keys.push({ note: noteName, octave: currentOctave });
+            }
+            return keys;
+        }
+        function whiteKeyInterval(note1, note2) {
+            let i1 = whiteIndices[note1];
+            let i2 = whiteIndices[note2];
+            let interval = i2 - i1;
+            return interval >= 0 ? interval : interval + 12;
+        }
+        function getBlackKey(whiteNote) {
+            const mapping = { "C": "C#", "D": "D#", "F": "F#", "G": "G#", "A": "A#" };
+            return mapping[whiteNote] || null;
+        }
+        function formatChordLabel(chord) {
+            if (!chord || chord.length === 0) return chord;
+            return chord.charAt(0).toUpperCase() + chord.slice(1);
+        }
+        function generateKeyboardSVG(chordData) {
+            // Configuración de colores y tamaños
+            let whiteHex = document.getElementById("whiteKeyColorPicker").value;
+            let whiteAlpha = document.getElementById("whiteAlpha").value / 100;
+            let blackHex = document.getElementById("blackKeyColorPicker").value;
+            let blackAlpha = document.getElementById("blackAlpha").value / 100;
+            let highlightHex = document.getElementById("highlightColorPicker").value;
+            let highlightAlpha = document.getElementById("highlightAlpha").value / 100;
+            let whiteNormalColor = getRgba(whiteHex, whiteAlpha);
+            let blackNormalColor = getRgba(blackHex, blackAlpha);
+            let highlightColor = getRgba(highlightHex, highlightAlpha);
+
+            const whiteKeyWidth = 50, whiteKeyHeight = 200, blackKeyWidth = 30, blackKeyHeight = 120, marginTop = 30;
+
+            // Teclado virtual: teclas blancas de C3 a B5 (21 teclas)
+            const whiteOrder = ["C", "D", "E", "F", "G", "A", "B"];
+            let virtualWhiteKeys = [];
+            for (let octave = 3; octave <= 5; octave++) {
+                for (let i = 0; i < whiteOrder.length; i++) {
+                    virtualWhiteKeys.push({ note: whiteOrder[i], octave: octave, x: virtualWhiteKeys.length * whiteKeyWidth });
+                }
+            }
+            const totalWhiteKeys = virtualWhiteKeys.length; // 21 teclas
+            const totalWidth = totalWhiteKeys * whiteKeyWidth;
+            const containerWhiteKeys = 10; // "ventana" de 10 teclas visibles
+            const containerWidth = containerWhiteKeys * whiteKeyWidth;
+            const svgHeight = marginTop + whiteKeyHeight + 20;
+
+            // Determinar los índices de las teclas resaltadas (solo se consideran las notas "blancas" para este cálculo)
+            let indices = [];
+            chordData.chordNotes.forEach(ch => {
+                // Si la nota es negra (contiene "#"), NO se activa la blanca anterior
+                if (!ch.note.includes("#")) {
+                    let idx = whiteOrder.indexOf(ch.note);
+                    if (idx !== -1) {
+                        indices.push((ch.octave - 3) * 7 + idx);
+                    }
+                } else {
+                    // Para las negras, usamos su posición "virtual" entre las blancas:
+                    // Se ubica entre la blanca cuyo nombre es la letra inicial y la siguiente.
+                    let idx = whiteOrder.indexOf(ch.note[0]);
+                    if (idx !== -1) {
+                        // Se asigna la posición media entre la blanca y la siguiente
+                        indices.push((ch.octave - 3) * 7 + idx + 0.5);
+                    }
+                }
+            });
+            let centerIndex;
+            if (indices.length > 0) {
+                let minIndex = Math.min(...indices);
+                let maxIndex = Math.max(...indices);
+                centerIndex = (minIndex + maxIndex) / 2;
+            } else {
+                centerIndex = totalWhiteKeys / 2;
+            }
+            // Determinar el índice de la primera tecla que se verá (ajustando para que entren teclas completas)
+            let startIndex = Math.round(centerIndex - containerWhiteKeys / 2);
+            if (startIndex < 0) startIndex = 0;
+            if (startIndex > totalWhiteKeys - containerWhiteKeys) startIndex = totalWhiteKeys - containerWhiteKeys;
+            let viewBoxX = startIndex * whiteKeyWidth;
+
+            // Construir el SVG: el viewBox se establece para que se muestren exactamente 10 teclas completas
+            let svg = `<svg width="80%" viewBox="${viewBoxX} 0 ${containerWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg" style="display:block; margin: 0 auto;">`;
+
+            // Posicionar el nombre del acorde siempre centrado respecto a la "ventana"
+            if (showChordName) {
+                svg += `<text x="${viewBoxX + containerWidth / 2}" y="20" text-anchor="middle" font-size="18" fill="black">
+      ${formatChordLabel(chordData.label)}
+    </text>`;
+            }
+
+            // Dibujar las teclas blancas
+            virtualWhiteKeys.forEach((key) => {
+                // Solo se resaltan las notas que se indiquen expresamente (evitando resaltar si es negra)
+                let highlight = chordData.chordNotes.some(ch => {
+                    return !ch.note.includes("#") && key.note === ch.note && key.octave === ch.octave;
+                });
+                let fillColor = highlight ? highlightColor : whiteNormalColor;
+                svg += `<rect x="${key.x}" y="${marginTop}" width="${whiteKeyWidth}" height="${whiteKeyHeight}" 
+      fill="${fillColor}" stroke="black" data-normal-fill="${whiteNormalColor}" onclick="toggleKeyColor(event)" ontouchstart="toggleKeyColor(event)" />`;
+                if (showNoteNames) {
+                    let label = key.note;
+                    if (showOctaveNumbers) { label += key.octave; }
+                    svg += `<text x="${key.x + whiteKeyWidth / 2}" y="${marginTop + whiteKeyHeight - 10}" text-anchor="middle" font-size="16" fill="black">${label}</text>`;
+                }
+            });
+
+            // Dibujar las teclas negras: se dibuja entre las blancas correspondientes (omitiendo entre E-F y B-C)
+            virtualWhiteKeys.forEach((key, index) => {
+                // Sólo dibujamos si existe tecla negra a la derecha
+                if (key.note === "E" || key.note === "B") return;
+                if (["C", "D", "F", "G", "A"].includes(key.note)) {
+                    let x = key.x + whiteKeyWidth - (blackKeyWidth / 2);
+                    const mapping = { "C": "C#", "D": "D#", "F": "F#", "G": "G#", "A": "A#" };
+                    let blackNote = mapping[key.note];
+                    let highlight = chordData.chordNotes.some(ch => ch.note === blackNote && ch.octave === key.octave);
+                    let fillColor = highlight ? highlightColor : blackNormalColor;
+                    svg += `<rect x="${x}" y="${marginTop}" width="${blackKeyWidth}" height="${blackKeyHeight}" 
+        fill="${fillColor}" stroke="black" data-normal-fill="${blackNormalColor}" onclick="toggleKeyColor(event)" ontouchstart="toggleKeyColor(event)" />`;
+                }
+            });
+
+            svg += `</svg>`;
+            return svg;
+        }
+
+        function generateSVGs() {
+            let input = document.getElementById("chordInput").value;
+            if (!input.trim()) { alert("Por favor, ingresa al menos un acorde."); return; }
+            let chords = input.split(/[\n,]+/).map(ch => ch.trim()).filter(Boolean);
+            let svgContainer = document.getElementById("svgContainer");
+            svgContainer.innerHTML = "";
+            generatedSVGs = [];
+            chords.forEach(chordStr => {
+                let chordData = parseChordBinary(chordStr);
+                if (chordData) {
+                    let svg = generateKeyboardSVG(chordData);
+                    generatedSVGs.push({ label: chordStr, svg: svg });
+                    svgContainer.innerHTML += svg + "<br><br>";
+                }
+            });
+            if (generatedSVGs.length > 0) { document.getElementById("downloadBtn").style.display = "block"; }
+        }
+        function downloadSVGs() {
+            if (generatedSVGs.length === 0) return;
+            let zip = new JSZip();
+            generatedSVGs.forEach(item => {
+                let fileName = item.label.replace(/[^A-Za-z0-9#]/g, "_") + ".svg";
+                zip.file(fileName, item.svg);
+            });
+            zip.generateAsync({ type: "blob" }).then(content => {
+                let a = document.createElement("a");
+                a.href = URL.createObjectURL(content);
+                a.download = "acordes.zip";
+                a.click();
+            });
+        }
+        document.getElementById('chordInput').addEventListener('change', function () {
+            let chords = this.value.split(/[\n,]+/);
+            let formattedChords = chords.map(ch => {
+                ch = ch.trim();
+                if (!ch) return "";
+                return ch.charAt(0).toUpperCase() + ch.slice(1);
+            }).filter(Boolean);
+            this.value = formattedChords.join(", ");
+        });
+    </script>
+    <!-- Función para alternar modo claro/oscuro -->
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById("themeToggle");
+            if (body.classList.contains("dark-mode")) {
+                body.classList.remove("dark-mode");
+                body.classList.add("light-mode");
+                themeToggle.innerHTML = '<span class="material-icons">dark_mode</span>';
+            } else {
+                body.classList.remove("light-mode");
+                body.classList.add("dark-mode");
+                themeToggle.innerHTML = '<span class="material-icons">light_mode</span>';
+            }
+        }
+    </script>
 </body>
+
 </html>
