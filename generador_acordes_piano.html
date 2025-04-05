@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,31 +10,126 @@
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
-    body { transition: background-color 0.3s, color 0.3s; }
-    .dark-mode { background-color: #343a40; color: #f8f9fa; }
-    .light-mode { background-color: #f8f9fa; color: #212529; }
-    header { padding: 20px; position: relative; }
-    .dark-mode header { background-color: #212529 !important; color: #f8f9fa !important; }
-    .light-mode header { background-color: #0d6efd !important; color: #fff !important; }
-    .container { max-width: 600px; margin-top: 20px; margin-bottom: 60px; }
-    .dark-mode .svg-box { border: 1px solid #212529; background: #212529; padding: 10px; margin-top: 20px; overflow-x: auto; }
-    .light-mode .svg-box { border: 1px solid #dee2e6; background: #ffffff; padding: 10px; margin-top: 20px; overflow-x: auto; }
-    .floating-download { position: fixed; bottom: 20px; right: 20px; z-index: 1050; display: none; width: 60px; height: 60px; border-radius: 50%; }
-    #themeToggle { position: fixed; top: 10px; right: 10px; background: transparent; border: none; color: inherit; font-size: 24px; cursor: pointer; z-index: 1100; }
-    body.light-mode #themeToggle .material-icons { color: #212529; }
-    body.dark-mode .btn-generate { background-color: #212529; border-color: #212529; color: #f8f9fa; }
-    body.light-mode .btn-generate { background-color: #0d6efd; border-color: #0d6efd; color: #fff; }
-    .btn-generate:hover { opacity: 0.9; }
-    .footer { position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; padding: 5px 0; font-size: 0.7rem; border-top: 1px solid; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
-    body.light-mode .footer { background-color: #f8f9fa; color: #6c757d; border-color: #dee2e6; }
-    body.dark-mode .footer { background-color: #212529; color: #adb5bd; border-color: #343a40; }
-    /* Clase para centrar los acordes de guitarra */
-    .guitar-chord {
-      display: block;
-      margin: 0 auto;
+    body {
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background-color: #343a40;
+      color: #f8f9fa;
+    }
+
+    .light-mode {
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+
+    header {
+      padding: 20px;
+      position: relative;
+    }
+
+    .dark-mode header {
+      background-color: #212529 !important;
+      color: #f8f9fa !important;
+    }
+
+    .light-mode header {
+      background-color: #0d6efd !important;
+      color: #fff !important;
+    }
+
+    .container {
+      max-width: 600px;
+      margin-top: 20px;
+      margin-bottom: 60px;
+    }
+
+    .dark-mode .svg-box {
+      border: 1px solid #212529;
+      background: #212529;
+      padding: 10px;
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .light-mode .svg-box {
+      border: 1px solid #dee2e6;
+      background: #ffffff;
+      padding: 10px;
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .floating-download {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1050;
+      display: none;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
+
+    #themeToggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: inherit;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+
+    body.light-mode #themeToggle .material-icons {
+      color: #212529;
+    }
+
+    body.dark-mode .btn-generate {
+      background-color: #212529;
+      border-color: #212529;
+      color: #f8f9fa;
+    }
+
+    body.light-mode .btn-generate {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+      color: #fff;
+    }
+
+    .btn-generate:hover {
+      opacity: 0.9;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      padding: 5px 0;
+      font-size: 0.7rem;
+      border-top: 1px solid;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    body.light-mode .footer {
+      background-color: #f8f9fa;
+      color: #6c757d;
+      border-color: #dee2e6;
+    }
+
+    body.dark-mode .footer {
+      background-color: #212529;
+      color: #adb5bd;
+      border-color: #343a40;
     }
   </style>
 </head>
+
 <body class="dark-mode">
   <header>
     <h1 class="text-center">Generador de Acordes</h1>
@@ -69,17 +165,17 @@
         <label class="form-check-label" for="switchChord">Nombre de Acorde</label>
       </div>
     </div>
-    <!-- Opciones de colores (se aplican tanto para piano como para guitarra) -->
+    <!-- Opciones de colores para piano -->
     <div class="mb-3">
       <div class="row">
         <div class="col">
-          <label for="whiteKeyColorPicker" class="form-label">Color de fondo</label>
+          <label for="whiteKeyColorPicker" class="form-label">Color de blancas</label>
           <input type="color" id="whiteKeyColorPicker" value="#ffffff">
           <label for="whiteAlpha" class="form-label" style="font-size: 0.9rem;">Transparencia (0-100%)</label>
           <input type="range" id="whiteAlpha" min="0" max="100" value="100">
         </div>
         <div class="col">
-          <label for="blackKeyColorPicker" class="form-label">Color de líneas y texto</label>
+          <label for="blackKeyColorPicker" class="form-label">Color de negras</label>
           <input type="color" id="blackKeyColorPicker" value="#000224">
           <label for="blackAlpha" class="form-label" style="font-size: 0.9rem;">Transparencia (0-100%)</label>
           <input type="range" id="blackAlpha" min="0" max="100" value="100">
@@ -92,6 +188,21 @@
         </div>
       </div>
     </div>
+    <div id="guitarOptions" class="mb-3" style="display:none;">
+      <div class="row">
+        <div class="col">
+          <label for="guitarWidth" class="form-label">Ancho del acorde (px):</label>
+          <input type="number" id="guitarWidth" class="form-control" value="150">
+        </div>
+        <div class="col">
+          <label for="guitarHeight" class="form-label">Alto del acorde (px):</label>
+          <input type="number" id="guitarHeight" class="form-control" value="250">
+        </div>
+      </div>
+    </div>
+
+
+
     <div class="d-grid gap-2">
       <button class="btn btn-generate btn-lg rounded-pill" onclick="generateChords()">Generar</button>
     </div>
@@ -107,76 +218,291 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-  <!-- Chord.js (código para acordes de guitarra) -->
-  <script src="chord.js"></script>
+  <!-- Incluir el JS externo para acordes de guitarra -->
+  <!-- <script src="chord.js"></script> -->
   <script>
-    // Variables globales para opciones
+    // Variables globales para opciones de piano
     let showOctaveNumbers = true, showNoteNames = true, showChordName = true;
+    document.getElementById("instrumentSelect").addEventListener("change", function () {
+      let instrument = this.value;
+      let guitarOptions = document.getElementById("guitarOptions");
+      guitarOptions.style.display = (instrument === "guitar") ? "block" : "none";
+    });
+
+    function GenerateGuitarChordSVG(name, positions, fingers, size, layout, stringNames, guitarColor1, guitarColor2, guitarColor3, customWidth, customHeight) {
+      // Dimensiones básicas
+      let width = parseInt(customWidth) || 150;
+      let height = parseInt(customHeight) || 250;
+      const svgNS = "http://www.w3.org/2000/svg";
+      let svg = document.createElementNS(svgNS, "svg");
+      svg.setAttribute("width", width);
+      svg.setAttribute("height", height);
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.style.display = "block";
+      svg.style.margin = "0 auto";
+
+      // Fondo del SVG
+      let bgRect = document.createElementNS(svgNS, "rect");
+      bgRect.setAttribute("x", "0");
+      bgRect.setAttribute("y", "0");
+      bgRect.setAttribute("width", width);
+      bgRect.setAttribute("height", height);
+      bgRect.setAttribute("fill", guitarColor1);
+      svg.appendChild(bgRect);
+
+      // Parámetros del diagrama
+      let marginX = 15, marginY = 30;
+      let numStrings = 6;
+      let numFrets = 5;
+      let spacingX = (width - 2 * marginX) / (numStrings - 1);
+      let spacingY = (height - marginY - 20) / numFrets; // 20px de margen inferior
+
+      // Determinar el traste base (mínimo fret numérico, ignorando "x", "-" y "0")
+      let baseFret = Infinity;
+      for (let i = 0; i < positions.length; i++) {
+        let posChar = positions[i].toLowerCase();
+        if (posChar !== "x" && posChar !== "-" && posChar !== "0") {
+          let fret = parseInt(posChar);
+          if (fret > 0 && fret < baseFret) {
+            baseFret = fret;
+          }
+        }
+      }
+      if (baseFret === Infinity) baseFret = 1;
+
+      // Dibujar cuerdas (líneas verticales)
+      for (let i = 0; i < numStrings; i++) {
+        let x = marginX + i * spacingX;
+        let line = document.createElementNS(svgNS, "line");
+        line.setAttribute("x1", x);
+        line.setAttribute("y1", marginY);
+        line.setAttribute("x2", x);
+        line.setAttribute("y2", marginY + numFrets * spacingY);
+        line.setAttribute("stroke", guitarColor2);
+        line.setAttribute("stroke-width", "2");
+        svg.appendChild(line);
+      }
+
+      // Dibujar trastes (líneas horizontales)
+      for (let i = 0; i <= numFrets; i++) {
+        let y = marginY + i * spacingY;
+        let line = document.createElementNS(svgNS, "line");
+        line.setAttribute("x1", marginX);
+        line.setAttribute("y1", y);
+        line.setAttribute("x2", width - marginX);
+        line.setAttribute("y2", y);
+        // Si estamos en la primera posición y el acorde es en el primer traste, la "nut" se dibuja gruesa.
+        line.setAttribute("stroke", guitarColor2);
+        line.setAttribute("stroke-width", (i === 0 && baseFret === 1) ? "6" : "2");
+        svg.appendChild(line);
+      }
+
+      // Si el acorde no está en la primera posición, indicar el traste base
+      if (baseFret > 1) {
+        let fretLabel = document.createElementNS(svgNS, "text");
+        fretLabel.setAttribute("x", marginX - 5);
+        fretLabel.setAttribute("y", marginY + 5);
+        fretLabel.setAttribute("text-anchor", "end");
+        fretLabel.setAttribute("fill", guitarColor2);
+        fretLabel.setAttribute("font-size", "14");
+        fretLabel.textContent = baseFret;
+        svg.appendChild(fretLabel);
+      }
+
+      // Función para dibujar marca circular individual
+      function drawCircle(x, y, finger) {
+        let circle = document.createElementNS(svgNS, "circle");
+        circle.setAttribute("cx", x);
+        circle.setAttribute("cy", y);
+        circle.setAttribute("r", "10");
+        circle.setAttribute("fill", guitarColor3);
+        svg.appendChild(circle);
+        if (finger && finger !== "-" && finger.toUpperCase() !== "X") {
+          let text = document.createElementNS(svgNS, "text");
+          text.setAttribute("x", x);
+          text.setAttribute("y", y + 4);
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("fill", guitarColor2);
+          text.setAttribute("font-size", "12");
+          text.textContent = finger;
+          svg.appendChild(text);
+        }
+      }
+
+      // Agrupar posiciones por dedo y valor de traste para detectar cejilla
+      let barreGroups = {};
+      for (let i = 0; i < positions.length; i++) {
+        let posChar = positions[i].toLowerCase();
+        if (posChar === "x" || posChar === "-" || posChar === "0") continue;
+        let fret = parseInt(posChar);
+        let finger = fingers && fingers.length > i ? fingers[i] : "";
+        let key = finger + '_' + fret; // agrupar por finger y fret
+        if (!barreGroups[key]) barreGroups[key] = [];
+        barreGroups[key].push(i);
+      }
+      // Dibujar barras (cejillas) para cada grupo con dos o más posiciones
+      let drawnBarreIndices = new Set();
+      for (let key in barreGroups) {
+        let group = barreGroups[key];
+        if (group.length >= 2) {
+          group.sort((a, b) => a - b);
+          let startIndex = group[0];
+          let endIndex = group[group.length - 1];
+          let parts = key.split('_');
+          let fret = parseInt(parts[1]);
+          let adjustedFret = fret - baseFret + 1;
+          let cy = marginY + (adjustedFret - 0.5) * spacingY;
+          let startX = marginX + startIndex * spacingX - 10;
+          let endX = marginX + endIndex * spacingX + 10;
+          let barreWidth = endX - startX;
+          let rect = document.createElementNS(svgNS, "rect");
+          rect.setAttribute("x", startX);
+          rect.setAttribute("y", cy - 10);
+          rect.setAttribute("width", barreWidth);
+          rect.setAttribute("height", 20);
+          rect.setAttribute("rx", "10");
+          rect.setAttribute("fill", guitarColor3);
+          svg.appendChild(rect);
+          // Mostrar el número de dedo en el centro si es uniforme
+          let finger = parts[0];
+          if (finger && finger !== "-" && finger.toUpperCase() !== "X") {
+            let text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", startX + barreWidth / 2);
+            text.setAttribute("y", cy + 4);
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("fill", guitarColor2);
+            text.setAttribute("font-size", "12");
+            text.textContent = finger;
+            svg.appendChild(text);
+          }
+          group.forEach(idx => drawnBarreIndices.add(idx));
+        }
+      }
+
+      // Dibujar marcas individuales para las posiciones que no fueron agrupadas en cejilla
+      for (let i = 0; i < positions.length; i++) {
+        let posChar = positions[i].toLowerCase();
+        if (posChar === "x" || posChar === "-" || posChar === "0") continue;
+        if (drawnBarreIndices.has(i)) continue;
+        let fret = parseInt(posChar);
+        let adjustedFret = fret - baseFret + 1;
+        let cy = marginY + (adjustedFret - 0.5) * spacingY;
+        let cx = marginX + i * spacingX;
+        let finger = fingers && fingers.length > i ? fingers[i] : "";
+        drawCircle(cx, cy, finger);
+      }
+
+      // Anotaciones superiores: mostrar "X" o "O" para cada cuerda
+      for (let i = 0; i < positions.length; i++) {
+        let posChar = positions[i];
+        let x = marginX + i * spacingX;
+        if (posChar.toLowerCase() === "x" || posChar === "-") {
+          let text = document.createElementNS(svgNS, "text");
+          text.setAttribute("x", x);
+          text.setAttribute("y", marginY - 10);
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("fill", guitarColor2);
+          text.setAttribute("font-size", "14");
+          text.textContent = "X";
+          svg.appendChild(text);
+        } else if (posChar === "0") {
+          let text = document.createElementNS(svgNS, "text");
+          text.setAttribute("x", x);
+          text.setAttribute("y", marginY - 10);
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("fill", guitarColor2);
+          text.setAttribute("font-size", "14");
+          text.textContent = "O";
+          svg.appendChild(text);
+        }
+      }
+
+      // Mostrar el nombre del acorde en la parte superior si la opción está activa
+      if (document.getElementById("switchChord").checked) {
+        let nameText = document.createElementNS(svgNS, "text");
+        nameText.setAttribute("x", width / 2);
+        nameText.setAttribute("y", "10");
+        nameText.setAttribute("text-anchor", "middle");
+        nameText.setAttribute("fill", guitarColor2);
+        nameText.setAttribute("font-size", "18");
+        nameText.textContent = name;
+        svg.appendChild(nameText);
+      }
+
+      return svg;
+    }
+
 
     function generateChords() {
-    let input = document.getElementById("chordInput").value;
-    if (!input.trim()) { 
-      alert("Por favor, ingresa al menos un acorde."); 
-      return; 
-    }
-    let chordsInput = input.split(/[\n,]+/).map(ch => ch.trim()).filter(Boolean);
-    chordsInput = chordsInput.map(ch => ch.charAt(0).toUpperCase() + ch.slice(1));
-    
-    let instrument = document.getElementById("instrumentSelect").value;
-    let container = document.getElementById("svgContainer");
-    container.innerHTML = "";
-    
-    if (instrument === "piano") {
-      chordsInput.forEach(chordStr => {
-        let chordData = parseChordBinary(chordStr);
-        if (chordData) {
-          let svg = generateKeyboardSVG(chordData);
-          container.innerHTML += svg + "<br><br>";
-        }
-      });
-      document.getElementById("downloadBtn").style.display = "block";
-    } else if (instrument === "guitar") {
-      document.getElementById("downloadBtn").style.display = "none";
-      
-      // Se obtienen los colores seleccionados en la UI
-      let fgColor = document.getElementById("blackKeyColorPicker").value;
-      let bgColor = document.getElementById("whiteKeyColorPicker").value;
-      let highlightColor = document.getElementById("highlightColorPicker").value;
-      
-      fetch('./chords.json?cb=' + Date.now(), { cache: 'no-store' })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('HTTP error, status = ' + response.status);
+      let input = document.getElementById("chordInput").value;
+      if (!input.trim()) {
+        alert("Por favor, ingresa al menos un acorde.");
+        return;
+      }
+      let chordsInput = input.split(/[\n,]+/).map(ch => ch.trim()).filter(Boolean);
+      // Aseguramos que la entrada tenga la primera letra mayúscula
+      chordsInput = chordsInput.map(ch => ch.charAt(0).toUpperCase() + ch.slice(1));
+
+      let instrument = document.getElementById("instrumentSelect").value;
+      let container = document.getElementById("svgContainer");
+      container.innerHTML = "";
+
+      if (instrument === "piano") {
+        chordsInput.forEach(chordStr => {
+          let chordData = parseChordBinary(chordStr);
+          if (chordData) {
+            let svg = generateKeyboardSVG(chordData);
+            container.innerHTML += svg + "<br><br>";
           }
-          return response.json();
-        })
-        .then(data => {
-          chordsInput.forEach(chordStr => {
-            let chordEntries = data[chordStr];
-            if (!chordEntries) {
-              container.innerHTML += `<p>Error: No se encontró configuración para el acorde ${chordStr}</p>`;
-            } else {
-              // Se toma la primera opción de configuración
-              let entry = chordEntries[0];
-              let positionsStr = entry.positions.join("");
-              let fingeringStr = entry.fingerings[0].join("");
-              // Si no se desea mostrar el nombre, se pasa cadena vacía
-              let chordName = showChordName ? chordStr : "";
-              // Se pasan los colores a la función generate
-              let canvas = chords.generate(chordName, positionsStr, fingeringStr, entry.size || "7", entry.layout || "1", null, fgColor, bgColor, highlightColor);
-              // Centrar el canvas con una clase CSS
-              canvas.classList.add("guitar-chord");
-              container.appendChild(canvas);
-              container.appendChild(document.createElement("br"));
-            }
-          });
-        })
-        .catch(err => {
-          console.error(err);
-          container.innerHTML = "<p>Error al cargar la configuración de acordes.</p>";
         });
+        document.getElementById("downloadBtn").style.display = "block";
+      } else
+        if (instrument === "guitar") {
+          document.getElementById("downloadBtn").style.display = "none";
+
+          fetch('./chords.json?cb=' + Date.now(), { cache: 'no-store' })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('HTTP error, status = ' + response.status);
+              }
+              return response.json();
+            })
+            .then(data => {
+              chordsInput.forEach(chordStr => {
+                let chordEntries = data[chordStr];
+                if (!chordEntries) {
+                  container.innerHTML += `<p>Error: No se encontró configuración para el acorde ${chordStr}</p>`;
+                } else {
+                  let entry = chordEntries[0];
+                  let positionsStr = entry.positions.join("");
+                  let fingeringStr = entry.fingerings[0].join("");
+
+                  // Obtener dimensiones personalizadas (por defecto 150 x 250)
+                  let customWidth = document.getElementById("guitarWidth").value;
+                  let customHeight = document.getElementById("guitarHeight").value;
+
+                  // Obtener los colores de los selectores del piano (ahora se interpretan para guitarra)
+                  // Para guitarra:
+                  // Color 1 = fondo, Color 2 = estructura, nombre y anotaciones, Color 3 = círculos de dedos
+                  let guitarColor1 = document.getElementById("whiteKeyColorPicker").value;
+                  let guitarColor2 = document.getElementById("blackKeyColorPicker").value;
+                  let guitarColor3 = document.getElementById("highlightColorPicker").value;
+
+                  // Generar el SVG del acorde de guitarra con las dimensiones y colores definidos
+                  let svgChord = GenerateGuitarChordSVG(chordStr, positionsStr, fingeringStr, entry.size || "7", "1", "", guitarColor1, guitarColor2, guitarColor3, customWidth, customHeight);
+                  container.appendChild(svgChord);
+                  container.appendChild(document.createElement("br"));
+                }
+              });
+            })
+            .catch(err => {
+              console.error(err);
+              container.innerHTML = "<p>Error al cargar la configuración de acordes.</p>";
+            });
+        }
+
     }
-  }
+
     function toggleTheme() {
       const body = document.body;
       const themeToggle = document.getElementById("themeToggle");
@@ -262,7 +588,7 @@
         return note.split("/").map(part => normalizeNote(part)).join("/");
       }
       note = note.trim();
-      const fixedCorrections = {"Fb": "E", "E#": "F", "Cb": "B", "B#": "C"};
+      const fixedCorrections = { "Fb": "E", "E#": "F", "Cb": "B", "B#": "C" };
       if (fixedCorrections[note]) return fixedCorrections[note];
       const regex = /^([A-G])([b#]+)?$/;
       const match = note.match(regex);
@@ -487,6 +813,497 @@
       }
     }
     function formatChordLabel(chord) { if (!chord || chord.length === 0) return chord; return chord.charAt(0).toUpperCase() + chord.slice(1); }
+
+
+    //chord.js
+    var ChordJS = (function () {
+
+      // Constantes
+      var NO_FINGER = '-';
+      var THUMB = 'T';
+      var INDEX_FINGER = '1';
+      var MIDDLE_FINGER = '2';
+      var RING_FINGER = '3';
+      var LITTLE_FINGER = '4';
+      var OPEN = 0;
+      var MUTED = -1;
+      var FRET_COUNT = 5;
+      var FONT_NAME = "Arial";
+
+      // Constructor de imagen de acorde modificado para aceptar colores personalizados.
+      // Los nuevos parámetros son:
+      //   fgColor: color de las líneas y textos (por defecto: '#000')
+      //   bgColor: color de fondo del diagrama (por defecto: '#FFF')
+      //   highlightColor: color para rellenar los círculos de los dedos (por defecto: fgColor)
+      var ChordBoxImage = function (name, chord, fingers, size, stringNames, fgColor, bgColor, highlightColor) {
+
+        // Se asignan los colores tomando los valores pasados o usando valores por defecto.
+        var _foregroundBrush = fgColor || '#000';
+        var _backgroundBrush = bgColor || '#FFF';
+        // El color destacado se usará para los círculos de digitación (dedos)
+        var _highlightBrush = highlightColor || _foregroundBrush;
+
+        var _ctx;
+        var Pen = function (color, size) {
+          return function () {
+            _ctx.strokeStyle = color;
+            _ctx.lineWidth = size;
+            _ctx.lineCap = 'round';
+          };
+        };
+        var Font = function (fname, size) {
+          return function () {
+            _ctx.font = size + "px " + fname;
+            _ctx.textBaseline = 'top';
+          };
+        };
+        var _graphics = (function () {
+          var DrawLine = function (pen, x1, y1, x2, y2) {
+            _ctx.beginPath();
+            pen();
+            _ctx.moveTo(x1, y1);
+            _ctx.lineTo(x2, y2);
+            _ctx.stroke();
+          };
+          var FillRectangle = function (color, x1, y1, x2, y2) {
+            _ctx.beginPath();
+            _ctx.fillStyle = color;
+            _ctx.rect(x1, y1, x2, y2);
+            _ctx.fill();
+          };
+          var DrawCircle = function (pen, x1, y1, diameter) {
+            var radius = diameter / 2;
+            _ctx.beginPath();
+            pen();
+            _ctx.arc(x1 + radius, y1 + radius, radius, 0, 2 * Math.PI, false);
+            _ctx.stroke();
+          };
+          var FillCircle = function (color, x1, y1, diameter) {
+            var radius = diameter / 2;
+            _ctx.beginPath();
+            _ctx.fillStyle = color;
+            _ctx.arc(x1 + radius, y1 + radius, radius, 0, 2 * Math.PI, false);
+            _ctx.fill();
+          };
+          var MeasureString = function (text, font) {
+            font();
+            var metrics = _ctx.measureText(text);
+            metrics.Width = metrics.width;
+            metrics.Height = _ctx.measureText('M').width;
+            return metrics;
+          };
+          var DrawString = function (text, font, color, x, y) {
+            font();
+            _ctx.fillStyle = color;
+            _ctx.fillText(text, x, y);
+          };
+          return {
+            DrawLine: DrawLine,
+            FillRectangle: FillRectangle,
+            DrawCircle: DrawCircle,
+            FillCircle: FillCircle,
+            MeasureString: MeasureString,
+            DrawString: DrawString,
+          };
+        })();
+
+        var _size;
+        var _chordPositions = [];
+        var _fingers = [NO_FINGER, NO_FINGER, NO_FINGER, NO_FINGER, NO_FINGER, NO_FINGER];
+
+        var _stringNames = stringNames || 'EADGBe';
+        var _chordName;
+        var _error;
+
+        var _fretWidth;
+        var _lineWidth;
+        var _boxWidth;
+        var _boxHeight;
+
+        var _imageWidth;
+        var _imageHeight;
+        var _xstart;
+        var _ystart;
+        var _nutHeight;
+
+        var _dotWidth;
+        var _signWidth;
+        var _signRadius;
+
+        var _fretFontSize;
+        var _fingerFontSize;
+        var _nameFontSize;
+        var _superScriptFontSize;
+        var _markerWidth;
+
+        var _baseFret;
+
+        var InitializeSizes = function () {
+          _fretWidth = 4 * _size;
+          _nutHeight = _fretWidth / 2;
+          _lineWidth = Math.ceil(_size * 0.31);
+          _dotWidth = Math.ceil(0.9 * _fretWidth);
+          _markerWidth = 0.7 * _fretWidth;
+          _boxWidth = 5 * _fretWidth + 6 * _lineWidth;
+          _boxHeight = FRET_COUNT * (_fretWidth + _lineWidth) + _lineWidth;
+
+          var perc = 0.8;
+          _fretFontSize = _fretWidth / perc;
+          _fingerFontSize = _fretWidth * 0.8;
+          _guitarStringFontSize = 'bold ' + (_fretWidth * 0.8);
+          _nameFontSize = _fretWidth * 2 / perc;
+          _superScriptFontSize = 0.7 * _nameFontSize;
+          if (_size == 1) {
+            _nameFontSize += 2;
+            _fingerFontSize += 2;
+            _fretFontSize += 2;
+            _superScriptFontSize += 2;
+          }
+
+          _xstart = _fretWidth;
+          _ystart = Math.round(0.2 * _superScriptFontSize + _nameFontSize + _nutHeight + 1.7 * _markerWidth);
+
+          _imageWidth = (_boxWidth + 2 * _fretWidth);
+          _imageHeight = (_boxHeight + _ystart + _fretWidth + _fretWidth);
+
+          _signWidth = (_fretWidth * 0.75);
+          _signRadius = _signWidth / 2;
+        };
+
+        var getWidth = function () { return _imageWidth; };
+        var getHeight = function () { return _imageHeight; };
+
+        var ParseSize = function (size) {
+          _size = parseFloat(size);
+          if (isNaN(_size)) {
+            _size = 1;
+          }
+        };
+
+        var ParseFingers = function (fingers) {
+          fingers = String(fingers).toUpperCase() + '------';
+          fingers = fingers.replace(/[^\-T1234]/g, '');
+          _fingers = fingers.substr(0, 6).split('');
+        };
+
+        var ParseChord = function (chord) {
+          if (chord == null || typeof chord == 'undefined' || !chord.match(/[\dxX]{6}|((1|2)?[\dxX]-){5}(1|2)?[\dxX]/)) {
+            _error = true;
+          } else {
+            var parts;
+            if (chord.length > 6) {
+              parts = chord.split('-');
+            } else {
+              parts = chord.split('');
+            }
+            var maxFret = 0;
+            var minFret = Number.MAX_VALUE;
+            for (var i = 0; i < 6; i++) {
+              if (parts[i].toUpperCase() == "X") {
+                _chordPositions[i] = MUTED;
+              } else {
+                _chordPositions[i] = parseInt(parts[i]);
+                maxFret = Math.max(maxFret, _chordPositions[i]);
+                if (_chordPositions[i] != 0) {
+                  minFret = Math.min(minFret, _chordPositions[i]);
+                }
+              }
+            }
+            if (maxFret <= 5) {
+              _baseFret = 1;
+            } else {
+              _baseFret = minFret;
+            }
+          }
+        };
+
+        var CreateImage = function (ctx, layout) {
+          _ctx = ctx;
+          _graphics.FillRectangle(_backgroundBrush, 0, 0, _imageWidth, _imageHeight);
+          if (_error) {
+            var errorPen = Pen('red', 3);
+            _graphics.DrawLine(errorPen, 0, 0, _imageWidth, _imageHeight);
+            _graphics.DrawLine(errorPen, 0, _imageHeight, _imageWidth, 0);
+          } else {
+            if (typeof layout === 'undefined' || layout === '1') {
+              DrawChordBox();
+              DrawBars();
+              DrawChordPositionsAndFingers();
+              DrawChordName();
+              DrawStringNames();
+            } else if (layout === '2') {
+              DrawChordBox();
+              DrawChordPositions();
+              DrawBars();
+              DrawChordName();
+              DrawFingers();
+            }
+          }
+        };
+
+        var DrawChordBox = function () {
+          var pen = Pen(_foregroundBrush, _lineWidth);
+          var totalFretWidth = _fretWidth + _lineWidth;
+          for (var i = 0; i <= FRET_COUNT; i++) {
+            var y = _ystart + i * totalFretWidth;
+            _graphics.DrawLine(pen, _xstart, y, _xstart + _boxWidth - _lineWidth, y);
+          }
+          for (var i = 0; i < 6; i++) {
+            var x = _xstart + (i * totalFretWidth);
+            _graphics.DrawLine(pen, x, _ystart, x, _ystart + _boxHeight - _lineWidth);
+          }
+          if (_baseFret == 1) {
+            var nutHeight = _fretWidth / 2;
+            _graphics.FillRectangle(_foregroundBrush, _xstart - _lineWidth / 2, _ystart - nutHeight, _boxWidth, nutHeight);
+          }
+        };
+
+        var DrawBars = function () {
+          var bars = {};
+          var bar;
+          for (var i = 0; i < 5; i++) {
+            if (_chordPositions[i] != MUTED && _chordPositions[i] != OPEN && _fingers[i] != NO_FINGER && !bars.hasOwnProperty(_fingers[i])) {
+              bar = { 'Str': i, 'Pos': _chordPositions[i], 'Length': 0, 'Finger': _fingers[i] };
+              for (var j = i + 1; j < 6; j++) {
+                if (_fingers[j] == bar['Finger'] && _chordPositions[j] == _chordPositions[i]) {
+                  bar['Length'] = j - i;
+                }
+              }
+              if (bar['Length'] > 0) {
+                bars[bar['Finger']] = bar;
+              }
+            }
+          }
+          var pen = Pen(_foregroundBrush, _lineWidth * 3);
+          var totalFretWidth = _fretWidth + _lineWidth;
+          for (var b in bars) {
+            if (bars.hasOwnProperty(b)) {
+              bar = bars[b];
+              var xstart = _xstart + bar['Str'] * totalFretWidth;
+              var xend = xstart + bar['Length'] * totalFretWidth;
+              var y = _ystart + (bar['Pos'] - _baseFret + 1) * totalFretWidth - (totalFretWidth / 2);
+              pen = Pen(_foregroundBrush, _dotWidth / 2);
+              _graphics.DrawLine(pen, xstart, y, xend, y);
+            }
+          }
+        };
+
+        var DrawChordPositions = function () {
+          var yoffset = _ystart - _fretWidth;
+          var totalFretWidth = _fretWidth + _lineWidth;
+          for (var i = 0; i < _chordPositions.length; i++) {
+            var absolutePos = _chordPositions[i];
+            var relativePos = absolutePos - _baseFret + 1;
+            var xpos = _xstart - (0.5 * _fretWidth) + (0.5 * _lineWidth) + (i * totalFretWidth);
+            if (relativePos > 0) {
+              var ypos = relativePos * totalFretWidth + yoffset;
+              _graphics.FillCircle(_foregroundBrush, xpos, ypos, _dotWidth);
+            } else if (absolutePos == OPEN) {
+              var pen = Pen(_foregroundBrush, _lineWidth);
+              var ypos = _ystart - _fretWidth;
+              var markerXpos = xpos + ((_dotWidth - _markerWidth) / 2);
+              if (_baseFret == 1) {
+                ypos -= _nutHeight;
+              }
+              _graphics.DrawCircle(pen, markerXpos, ypos, _markerWidth);
+            } else if (absolutePos == MUTED) {
+              var pen = Pen(_foregroundBrush, _lineWidth * 1.5);
+              var ypos = _ystart - _fretWidth;
+              var markerXpos = xpos + ((_dotWidth - _markerWidth) / 2);
+              if (_baseFret == 1) {
+                ypos -= _nutHeight;
+              }
+              _graphics.DrawLine(pen, markerXpos, ypos, markerXpos + _markerWidth, ypos + _markerWidth);
+              _graphics.DrawLine(pen, markerXpos, ypos + _markerWidth, markerXpos + _markerWidth, ypos);
+            }
+          }
+        };
+
+        // En DrawChordPositionsAndFingers se utiliza _highlightBrush para rellenar los círculos donde se muestran los dedos.
+        var DrawChordPositionsAndFingers = function () {
+          var yoffset = _ystart - _fretWidth;
+          var totalFretWidth = _fretWidth + _lineWidth;
+          var font = Font(FONT_NAME, _fingerFontSize);
+          for (var i = 0; i < _chordPositions.length; i++) {
+            var absolutePos = _chordPositions[i];
+            var relativePos = absolutePos - _baseFret + 1;
+            var xpos = _xstart - (0.5 * _fretWidth) + (0.5 * _lineWidth) + (i * totalFretWidth);
+            if (relativePos > 0) {
+              var ypos = relativePos * totalFretWidth + yoffset;
+              // Se utiliza el color destacado para dibujar el círculo de digitación
+              _graphics.FillCircle(_highlightBrush, xpos, ypos, _dotWidth);
+              var finger = _fingers[i];
+              if (finger != NO_FINGER) {
+                var charSize = _graphics.MeasureString(finger.toString(), font);
+                _graphics.DrawString(finger.toString(), font, _backgroundBrush, xpos - (0.5 * charSize.Width) + _dotWidth / 2, ypos - (0.5 * charSize.Height) + _dotWidth / 2);
+              }
+            } else if (absolutePos == OPEN) {
+              var pen = Pen(_foregroundBrush, _lineWidth);
+              var ypos = _ystart - _fretWidth;
+              var markerXpos = xpos + ((_dotWidth - _markerWidth) / 2);
+              if (_baseFret == 1) {
+                ypos -= _nutHeight;
+              }
+              _graphics.DrawCircle(pen, markerXpos, ypos, _markerWidth);
+              var finger = _fingers[i];
+              if (finger != NO_FINGER) {
+                var charSize = _graphics.MeasureString(finger.toString(), font);
+                _graphics.DrawString(finger.toString(), font, _backgroundBrush, xpos - (0.5 * charSize.Width) + _dotWidth / 2, ypos - (0.5 * charSize.Height) + _dotWidth / 2);
+              }
+            } else if (absolutePos == MUTED) {
+              var pen = Pen(_foregroundBrush, _lineWidth * 1.5);
+              var ypos = _ystart - _fretWidth;
+              var markerXpos = xpos + ((_dotWidth - _markerWidth) / 2);
+              if (_baseFret == 1) {
+                ypos -= _nutHeight;
+              }
+              _graphics.DrawLine(pen, markerXpos, ypos, markerXpos + _markerWidth, ypos + _markerWidth);
+              _graphics.DrawLine(pen, markerXpos, ypos + _markerWidth, markerXpos + _markerWidth, ypos);
+              var finger = _fingers[i];
+              if (finger != NO_FINGER) {
+                var charSize = _graphics.MeasureString(finger.toString(), font);
+                _graphics.DrawString(finger.toString(), font, _backgroundBrush, xpos - (0.5 * charSize.Width) + _dotWidth / 2, ypos - (0.5 * charSize.Height) + _dotWidth / 2);
+              }
+            }
+          }
+        };
+
+        var DrawFingers = function () {
+          var xpos = _xstart + (0.5 * _lineWidth);
+          var ypos = _ystart + _boxHeight;
+          var font = Font(FONT_NAME, _fingerFontSize);
+          for (var f = 0; f < _fingers.length; f++) {
+            var finger = _fingers[f];
+            if (finger != NO_FINGER) {
+              var charSize = _graphics.MeasureString(finger.toString(), font);
+              _graphics.DrawString(finger.toString(), font, _foregroundBrush, xpos - (0.5 * charSize.Width), ypos - (0.5 * charSize.Height) + _dotWidth / 2);
+            }
+            xpos += (_fretWidth + _lineWidth);
+          }
+        };
+
+        var DrawStringNames = function () {
+          var xpos = _xstart + (0.5 * _lineWidth);
+          var ypos = _ystart + _boxHeight;
+          var font = Font(FONT_NAME, _guitarStringFontSize);
+          for (var s = 0; s < 6; s++) {
+            var guitarString = _stringNames[s];
+            var charSize = _graphics.MeasureString(guitarString, font);
+            _graphics.DrawString(guitarString, font, _foregroundBrush, xpos - (0.5 * charSize.Width), ypos);
+            xpos += (_fretWidth + _lineWidth);
+          }
+        };
+
+        var DrawChordName = function () {
+          var nameFont = Font(FONT_NAME, _nameFontSize);
+          var superFont = Font(FONT_NAME, _superScriptFontSize);
+          var name;
+          var supers;
+          if (_chordName.indexOf('_') == -1) {
+            name = _chordName;
+            supers = "";
+          } else {
+            var parts = _chordName.split('_');
+            name = parts[0];
+            supers = parts[1];
+          }
+          var stringSize = _graphics.MeasureString(name, nameFont);
+          var xTextStart = _xstart;
+          if (stringSize.Width < _boxWidth) {
+            xTextStart = _xstart + ((_boxWidth - stringSize.Width) / 2);
+          }
+          _graphics.DrawString(name, nameFont, _foregroundBrush, xTextStart, 0.2 * _superScriptFontSize);
+          if (supers != "") {
+            _graphics.DrawString(supers, superFont, _foregroundBrush, xTextStart + 0.8 * stringSize.Width, 0);
+          }
+          if (_baseFret > 1) {
+            var fretFont = Font(FONT_NAME, _fretFontSize);
+            var offset = (_fretFontSize - _fretWidth) / 2;
+            _graphics.DrawString(_baseFret + "fr", fretFont, _foregroundBrush, _xstart + _boxWidth + 0.4 * _fretWidth, _ystart - offset);
+          }
+        };
+
+        if (name == null || typeof name == 'undefined') {
+          _chordName = "";
+        } else {
+          _chordName = name.replace(" ", "");
+        }
+        ParseChord(chord);
+        ParseFingers(fingers);
+        ParseSize(size);
+        InitializeSizes();
+
+        return {
+          getWidth: getWidth,
+          getHeight: getHeight,
+          Draw: CreateImage
+        };
+      };
+
+      // Se actualiza GenerateChordHtml para aceptar los nuevos parámetros de color.
+      function GenerateChordHtml(name, positions, fingering, size, layout, stringNames, fgColor, bgColor, highlightColor) {
+        if (positions.length != 6 || fingering.length != 6) {
+          console.error('ChordJS cannot generate a chord diagram from invalid chord input! (Too many positions or fingers.)');
+          positions = 'xxxxxx';
+          fingering = '------';
+        }
+        var chordObj = ChordBoxImage(name, positions, fingering, size, stringNames, fgColor, bgColor, highlightColor);
+        var canvas = document.createElement('canvas');
+        canvas.setAttribute('class', 'rendered-chord');
+        canvas.setAttribute('width', chordObj.getWidth());
+        canvas.setAttribute('height', chordObj.getHeight());
+        var ctx = canvas.getContext('2d');
+        chordObj.Draw(ctx, layout);
+        return canvas;
+      }
+
+      var ReplaceChordElements = function (baseEl) {
+        baseEl = baseEl || 'body';
+        var renderedChords = document.querySelector(baseEl).getElementsByClassName('rendered-chord');
+        while (renderedChords[0]) {
+          renderedChords[0].remove();
+        }
+        var chords = document.getElementsByTagName('chord');
+        for (var i = 0; i < chords.length; i++) {
+          var elt = chords[i];
+          var name = elt.getAttribute('name');
+          var positions = elt.getAttribute('positions');
+          var fingers = elt.getAttribute('fingers');
+          var size = elt.getAttribute('size');
+          var layout = elt.getAttribute('layout');
+          var stringNames = elt.getAttribute('strings');
+          var fgColor = elt.getAttribute('fgColor') || '#000';
+          var bgColor = elt.getAttribute('bgColor') || '#FFF';
+          var highlightColor = elt.getAttribute('highlightColor') || fgColor;
+          var canvas = GenerateChordHtml(name, positions, fingers, size, layout, stringNames, fgColor, bgColor, highlightColor);
+
+          // Aplicar tamaño personalizado mediante CSS, sin modificar los atributos del canvas
+          var customWidth = elt.getAttribute('customWidth');
+          var customHeight = elt.getAttribute('customHeight');
+          if (customWidth) {
+            canvas.style.width = customWidth + "px";
+          }
+          if (customHeight) {
+            canvas.style.height = customHeight + "px";
+          }
+
+          // Centrar el canvas
+          canvas.style.display = 'block';
+          canvas.style.margin = '0 auto';
+
+          elt.parentNode.insertBefore(canvas, elt);
+        }
+      };
+
+      return {
+        chord: ChordBoxImage,
+        replace: ReplaceChordElements,
+        generate: GenerateChordHtml
+      };
+
+    })();
+    var chords = ChordJS;
   </script>
 </body>
+
 </html>
