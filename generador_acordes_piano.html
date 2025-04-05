@@ -192,7 +192,7 @@
       <div class="row">
         <div class="col">
           <label for="guitarWidth" class="form-label">Ancho del acorde (px):</label>
-          <input type="number" id="guitarWidth" class="form-control" value="150">
+          <input type="number" id="guitarWidth" class="form-control" value="130">
         </div>
         <div class="col">
           <label for="guitarHeight" class="form-label">Alto del acorde (px):</label>
@@ -229,208 +229,227 @@
       guitarOptions.style.display = (instrument === "guitar") ? "block" : "none";
     });
 
-    function GenerateGuitarChordSVG(name, positions, fingers, size, layout, stringNames, guitarColor1, guitarColor2, guitarColor3, customWidth, customHeight) {
-      // Dimensiones básicas
-      let width = parseInt(customWidth) || 150;
-      let height = parseInt(customHeight) || 250;
-      const svgNS = "http://www.w3.org/2000/svg";
-      let svg = document.createElementNS(svgNS, "svg");
-      svg.setAttribute("width", width);
-      svg.setAttribute("height", height);
-      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg.style.display = "block";
-      svg.style.margin = "0 auto";
+    function GenerateGuitarChordSVG(name, positions, fingers, size, layout, stringNames, guitarColor1, guitarColor2, guitarColor3, customWidth, customHeight, showFingerNumbers) {
+  // Si no se especifica, ocultar los números de dedos por defecto
+  if (typeof showFingerNumbers === 'undefined') {
+    showFingerNumbers = false;
+  }
+  
+  // Dimensiones básicas
+  let width = parseInt(customWidth) || 150;
+  let height = parseInt(customHeight) || 250;
+  const svgNS = "http://www.w3.org/2000/svg";
+  let svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("width", width);
+  svg.setAttribute("height", height);
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  svg.style.display = "block";
+  svg.style.margin = "0 auto";
 
-      // Fondo del SVG
-      let bgRect = document.createElementNS(svgNS, "rect");
-      bgRect.setAttribute("x", "0");
-      bgRect.setAttribute("y", "0");
-      bgRect.setAttribute("width", width);
-      bgRect.setAttribute("height", height);
-      bgRect.setAttribute("fill", guitarColor1);
-      svg.appendChild(bgRect);
+  // Fondo del SVG
+  let bgRect = document.createElementNS(svgNS, "rect");
+  bgRect.setAttribute("x", "0");
+  bgRect.setAttribute("y", "0");
+  bgRect.setAttribute("width", width);
+  bgRect.setAttribute("height", height);
+  bgRect.setAttribute("fill", guitarColor1);
+  svg.appendChild(bgRect);
 
-      // Parámetros del diagrama
-      let marginX = 15, marginY = 30;
-      let numStrings = 6;
-      let numFrets = 5;
-      let spacingX = (width - 2 * marginX) / (numStrings - 1);
-      let spacingY = (height - marginY - 20) / numFrets; // 20px de margen inferior
+  // Definir márgenes: espacio para el nombre del acorde y separación
+  let chordNameMargin = 30; // espacio para el nombre del acorde
+  let marginY = chordNameMargin + 30; // la parte superior del diagrama se inicia 20px más abajo
+  let marginX = 15;
+  let numStrings = 6;
+  let numFrets = 5;
+  let spacingX = (width - 2 * marginX) / (numStrings - 1);
+  let spacingY = (height - marginY - 20) / numFrets; // 20px de margen inferior
 
-      // Determinar el traste base (mínimo fret numérico, ignorando "x", "-" y "0")
-      let baseFret = Infinity;
-      for (let i = 0; i < positions.length; i++) {
-        let posChar = positions[i].toLowerCase();
-        if (posChar !== "x" && posChar !== "-" && posChar !== "0") {
-          let fret = parseInt(posChar);
-          if (fret > 0 && fret < baseFret) {
-            baseFret = fret;
-          }
-        }
+  // Calcular traste mínimo y máximo (ignorando "x", "-" y "0")
+  let minFret = Infinity, maxFret = 0;
+  for (let i = 0; i < positions.length; i++) {
+    let posChar = positions[i].toLowerCase();
+    if (posChar !== "x" && posChar !== "-" && posChar !== "0") {
+      let fret = parseInt(posChar);
+      if (fret < minFret) minFret = fret;
+      if (fret > maxFret) maxFret = fret;
+    }
+  }
+  // Si ningún dedo se ubica más allá del traste 5, se arma desde el traste 1
+  let baseFret = (maxFret <= 5) ? 1 : minFret;
+
+  // Dibujar cuerdas (líneas verticales)
+  for (let i = 0; i < numStrings; i++) {
+    let x = marginX + i * spacingX;
+    let line = document.createElementNS(svgNS, "line");
+    line.setAttribute("x1", x);
+    line.setAttribute("y1", marginY);
+    line.setAttribute("x2", x);
+    line.setAttribute("y2", marginY + numFrets * spacingY);
+    line.setAttribute("stroke", guitarColor2);
+    line.setAttribute("stroke-width", "2");
+    svg.appendChild(line);
+  }
+
+  // Dibujar trastes (líneas horizontales)
+  for (let i = 0; i <= numFrets; i++) {
+    let y = marginY + i * spacingY;
+    let line = document.createElementNS(svgNS, "line");
+    line.setAttribute("x1", marginX);
+    line.setAttribute("y1", y);
+    line.setAttribute("x2", width - marginX);
+    line.setAttribute("y2", y);
+    // Dibujar la "nut" gruesa solo si se arma desde el traste 1
+    line.setAttribute("stroke", guitarColor2);
+    line.setAttribute("stroke-width", (i === 0 && baseFret === 1) ? "6" : "2");
+    svg.appendChild(line);
+  }
+
+  // Función para dibujar una marca circular individual (nota del dedo)
+  function drawCircle(x, y, finger) {
+    let circle = document.createElementNS(svgNS, "circle");
+    circle.setAttribute("cx", x);
+    circle.setAttribute("cy", y);
+    circle.setAttribute("r", "10");
+    circle.setAttribute("fill", guitarColor3);
+    // Agregar contorno fino con el color 2
+    circle.setAttribute("stroke", guitarColor2);
+    circle.setAttribute("stroke-width", "1");
+    svg.appendChild(circle);
+    if (showFingerNumbers && finger && finger !== "-" && finger.toUpperCase() !== "X") {
+      let text = document.createElementNS(svgNS, "text");
+      text.setAttribute("x", x);
+      text.setAttribute("y", y + 4);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("fill", guitarColor2);
+      text.setAttribute("font-size", "12");
+      text.textContent = finger;
+      svg.appendChild(text);
+    }
+  }
+
+  // Agrupar posiciones por dedo y valor de traste para detectar cejilla
+  let barreGroups = {};
+  for (let i = 0; i < positions.length; i++) {
+    let posChar = positions[i].toLowerCase();
+    if (posChar === "x" || posChar === "-" || posChar === "0") continue;
+    let fret = parseInt(posChar);
+    let finger = fingers && fingers.length > i ? fingers[i] : "";
+    let key = finger + '_' + fret;
+    if (!barreGroups[key]) barreGroups[key] = [];
+    barreGroups[key].push(i);
+  }
+  // Dibujar barras (cejillas) para cada grupo con dos o más posiciones
+  let drawnBarreIndices = new Set();
+  for (let key in barreGroups) {
+    let group = barreGroups[key];
+    if (group.length >= 2) {
+      group.sort((a, b) => a - b);
+      let startIndex = group[0];
+      let endIndex = group[group.length - 1];
+      let parts = key.split('_');
+      let fret = parseInt(parts[1]);
+      let adjustedFret = fret - baseFret + 1;
+      let cy = marginY + (adjustedFret - 0.5) * spacingY;
+      let startX = marginX + startIndex * spacingX - 10;
+      let endX = marginX + endIndex * spacingX + 10;
+      let barreWidth = endX - startX;
+      let rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("x", startX);
+      rect.setAttribute("y", cy - 10);
+      rect.setAttribute("width", barreWidth);
+      rect.setAttribute("height", 20);
+      rect.setAttribute("rx", "10");
+      rect.setAttribute("fill", guitarColor3);
+      // Contorno fino a la barra
+      rect.setAttribute("stroke", guitarColor2);
+      rect.setAttribute("stroke-width", "1");
+      svg.appendChild(rect);
+      // Mostrar el número de dedo en el centro de la cejilla, si se desea
+      if (showFingerNumbers && parts[0] && parts[0] !== "-" && parts[0].toUpperCase() !== "X") {
+        let text = document.createElementNS(svgNS, "text");
+        text.setAttribute("x", startX + barreWidth / 2);
+        text.setAttribute("y", cy + 4);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("fill", guitarColor2);
+        text.setAttribute("font-size", "12");
+        text.textContent = parts[0];
+        svg.appendChild(text);
       }
-      if (baseFret === Infinity) baseFret = 1;
-
-      // Dibujar cuerdas (líneas verticales)
-      for (let i = 0; i < numStrings; i++) {
-        let x = marginX + i * spacingX;
-        let line = document.createElementNS(svgNS, "line");
-        line.setAttribute("x1", x);
-        line.setAttribute("y1", marginY);
-        line.setAttribute("x2", x);
-        line.setAttribute("y2", marginY + numFrets * spacingY);
-        line.setAttribute("stroke", guitarColor2);
-        line.setAttribute("stroke-width", "2");
-        svg.appendChild(line);
-      }
-
-      // Dibujar trastes (líneas horizontales)
-      for (let i = 0; i <= numFrets; i++) {
-        let y = marginY + i * spacingY;
-        let line = document.createElementNS(svgNS, "line");
-        line.setAttribute("x1", marginX);
-        line.setAttribute("y1", y);
-        line.setAttribute("x2", width - marginX);
-        line.setAttribute("y2", y);
-        // Si estamos en la primera posición y el acorde es en el primer traste, la "nut" se dibuja gruesa.
-        line.setAttribute("stroke", guitarColor2);
-        line.setAttribute("stroke-width", (i === 0 && baseFret === 1) ? "6" : "2");
-        svg.appendChild(line);
-      }
-
-      // Si el acorde no está en la primera posición, indicar el traste base
-      if (baseFret > 1) {
+      // Mostrar el número de traste junto a la cejilla si se usan trastes mayores a 5
+      if (maxFret > 5) {
         let fretLabel = document.createElementNS(svgNS, "text");
-        fretLabel.setAttribute("x", marginX - 5);
-        fretLabel.setAttribute("y", marginY + 5);
-        fretLabel.setAttribute("text-anchor", "end");
+        // Asegurarse que el número no se salga del canvas
+        let labelX = endX + 5;
+        // let labelX = width/2;
+        if (labelX > width - marginX) {
+          labelX = width - marginX;
+        }
+        fretLabel.setAttribute("x", labelX);
+        fretLabel.setAttribute("y", cy + 4);
+        fretLabel.setAttribute("text-anchor", "start");
         fretLabel.setAttribute("fill", guitarColor2);
         fretLabel.setAttribute("font-size", "14");
+        fretLabel.setAttribute("font-weight", "bold");
         fretLabel.textContent = baseFret;
         svg.appendChild(fretLabel);
       }
-
-      // Función para dibujar marca circular individual
-      function drawCircle(x, y, finger) {
-        let circle = document.createElementNS(svgNS, "circle");
-        circle.setAttribute("cx", x);
-        circle.setAttribute("cy", y);
-        circle.setAttribute("r", "10");
-        circle.setAttribute("fill", guitarColor3);
-        svg.appendChild(circle);
-        if (finger && finger !== "-" && finger.toUpperCase() !== "X") {
-          let text = document.createElementNS(svgNS, "text");
-          text.setAttribute("x", x);
-          text.setAttribute("y", y + 4);
-          text.setAttribute("text-anchor", "middle");
-          text.setAttribute("fill", guitarColor2);
-          text.setAttribute("font-size", "12");
-          text.textContent = finger;
-          svg.appendChild(text);
-        }
-      }
-
-      // Agrupar posiciones por dedo y valor de traste para detectar cejilla
-      let barreGroups = {};
-      for (let i = 0; i < positions.length; i++) {
-        let posChar = positions[i].toLowerCase();
-        if (posChar === "x" || posChar === "-" || posChar === "0") continue;
-        let fret = parseInt(posChar);
-        let finger = fingers && fingers.length > i ? fingers[i] : "";
-        let key = finger + '_' + fret; // agrupar por finger y fret
-        if (!barreGroups[key]) barreGroups[key] = [];
-        barreGroups[key].push(i);
-      }
-      // Dibujar barras (cejillas) para cada grupo con dos o más posiciones
-      let drawnBarreIndices = new Set();
-      for (let key in barreGroups) {
-        let group = barreGroups[key];
-        if (group.length >= 2) {
-          group.sort((a, b) => a - b);
-          let startIndex = group[0];
-          let endIndex = group[group.length - 1];
-          let parts = key.split('_');
-          let fret = parseInt(parts[1]);
-          let adjustedFret = fret - baseFret + 1;
-          let cy = marginY + (adjustedFret - 0.5) * spacingY;
-          let startX = marginX + startIndex * spacingX - 10;
-          let endX = marginX + endIndex * spacingX + 10;
-          let barreWidth = endX - startX;
-          let rect = document.createElementNS(svgNS, "rect");
-          rect.setAttribute("x", startX);
-          rect.setAttribute("y", cy - 10);
-          rect.setAttribute("width", barreWidth);
-          rect.setAttribute("height", 20);
-          rect.setAttribute("rx", "10");
-          rect.setAttribute("fill", guitarColor3);
-          svg.appendChild(rect);
-          // Mostrar el número de dedo en el centro si es uniforme
-          let finger = parts[0];
-          if (finger && finger !== "-" && finger.toUpperCase() !== "X") {
-            let text = document.createElementNS(svgNS, "text");
-            text.setAttribute("x", startX + barreWidth / 2);
-            text.setAttribute("y", cy + 4);
-            text.setAttribute("text-anchor", "middle");
-            text.setAttribute("fill", guitarColor2);
-            text.setAttribute("font-size", "12");
-            text.textContent = finger;
-            svg.appendChild(text);
-          }
-          group.forEach(idx => drawnBarreIndices.add(idx));
-        }
-      }
-
-      // Dibujar marcas individuales para las posiciones que no fueron agrupadas en cejilla
-      for (let i = 0; i < positions.length; i++) {
-        let posChar = positions[i].toLowerCase();
-        if (posChar === "x" || posChar === "-" || posChar === "0") continue;
-        if (drawnBarreIndices.has(i)) continue;
-        let fret = parseInt(posChar);
-        let adjustedFret = fret - baseFret + 1;
-        let cy = marginY + (adjustedFret - 0.5) * spacingY;
-        let cx = marginX + i * spacingX;
-        let finger = fingers && fingers.length > i ? fingers[i] : "";
-        drawCircle(cx, cy, finger);
-      }
-
-      // Anotaciones superiores: mostrar "X" o "O" para cada cuerda
-      for (let i = 0; i < positions.length; i++) {
-        let posChar = positions[i];
-        let x = marginX + i * spacingX;
-        if (posChar.toLowerCase() === "x" || posChar === "-") {
-          let text = document.createElementNS(svgNS, "text");
-          text.setAttribute("x", x);
-          text.setAttribute("y", marginY - 10);
-          text.setAttribute("text-anchor", "middle");
-          text.setAttribute("fill", guitarColor2);
-          text.setAttribute("font-size", "14");
-          text.textContent = "X";
-          svg.appendChild(text);
-        } else if (posChar === "0") {
-          let text = document.createElementNS(svgNS, "text");
-          text.setAttribute("x", x);
-          text.setAttribute("y", marginY - 10);
-          text.setAttribute("text-anchor", "middle");
-          text.setAttribute("fill", guitarColor2);
-          text.setAttribute("font-size", "14");
-          text.textContent = "O";
-          svg.appendChild(text);
-        }
-      }
-
-      // Mostrar el nombre del acorde en la parte superior si la opción está activa
-      if (document.getElementById("switchChord").checked) {
-        let nameText = document.createElementNS(svgNS, "text");
-        nameText.setAttribute("x", width / 2);
-        nameText.setAttribute("y", "10");
-        nameText.setAttribute("text-anchor", "middle");
-        nameText.setAttribute("fill", guitarColor2);
-        nameText.setAttribute("font-size", "18");
-        nameText.textContent = name;
-        svg.appendChild(nameText);
-      }
-
-      return svg;
+      group.forEach(idx => drawnBarreIndices.add(idx));
     }
+  }
+
+  // Dibujar marcas individuales para las posiciones que no fueron agrupadas en cejilla
+  for (let i = 0; i < positions.length; i++) {
+    let posChar = positions[i].toLowerCase();
+    if (posChar === "x" || posChar === "-" || posChar === "0") continue;
+    if (drawnBarreIndices.has(i)) continue;
+    let fret = parseInt(posChar);
+    let adjustedFret = fret - baseFret + 1;
+    let cy = marginY + (adjustedFret - 0.5) * spacingY;
+    let cx = marginX + i * spacingX;
+    let finger = fingers && fingers.length > i ? fingers[i] : "";
+    drawCircle(cx, cy, finger);
+  }
+
+  // Anotaciones superiores: mostrar "X" o "O" para cada cuerda
+  for (let i = 0; i < positions.length; i++) {
+    let posChar = positions[i];
+    let x = marginX + i * spacingX;
+    if (posChar.toLowerCase() === "x" || posChar === "-") {
+      let text = document.createElementNS(svgNS, "text");
+      text.setAttribute("x", x);
+      text.setAttribute("y", marginY - 10);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("fill", guitarColor2);
+      text.setAttribute("font-size", "14");
+      text.textContent = "X";
+      svg.appendChild(text);
+    } else if (posChar === "0") {
+      let text = document.createElementNS(svgNS, "text");
+      text.setAttribute("x", x);
+      text.setAttribute("y", marginY - 10);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("fill", guitarColor2);
+      text.setAttribute("font-size", "14");
+      text.textContent = "O";
+      svg.appendChild(text);
+    }
+  }
+
+  // Mostrar el nombre del acorde en la parte superior, usando el margen definido
+  if (document.getElementById("switchChord").checked) {
+    let nameText = document.createElementNS(svgNS, "text");    
+    nameText.setAttribute("font-weight", "bold");
+    nameText.setAttribute("x", width / 2);
+    nameText.setAttribute("y", chordNameMargin); // Ubicado según el margen definido
+    nameText.setAttribute("text-anchor", "middle");
+    nameText.setAttribute("fill", guitarColor2);
+    nameText.setAttribute("font-size", "18");
+    nameText.textContent = name;
+    svg.appendChild(nameText);
+  }
+
+  return svg;
+}
 
 
     function generateChords() {
