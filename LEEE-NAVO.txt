@@ -1,0 +1,16 @@
+Este código se ejecuta con servidor.
+Prová con el de python:
+
+python -m http.server
+
+o con el de node.js:
+
+npx http-server -p 8000
+o
+npx serve -l 8000
+o
+npx serve 8000
+
+y después de iniciar cualquiera de esos ingresás a:
+
+http://localhost:8000
